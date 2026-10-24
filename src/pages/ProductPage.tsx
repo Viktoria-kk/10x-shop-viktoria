@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { fetchProductById } from '../api/products.api'
+import { useCart } from '../context/cart-context'
 import type { Product } from '../types/product'
 import { discountedPrice, formatPrice } from '../utils/format'
 import NotFoundPage from './NotFoundPage'
 
 function ProductDetails({ productId }: { productId: number }) {
+  const { items, addItem } = useCart()
   const [product, setProduct] = useState<Product | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
   const [notFound, setNotFound] = useState(false)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [quantity, setQuantity] = useState(1)
+  const [feedback, setFeedback] = useState('')
 
   useEffect(() => {
     let isCurrent = true
@@ -55,11 +58,26 @@ function ProductDetails({ productId }: { productId: number }) {
 
   if (notFound || product === null) return <NotFoundPage />
 
+  const displayedProduct = product
   const hasDiscount = product.discountPercentage >= 1
   const images = product.images.length > 0 ? product.images : [product.thumbnail]
+  const cartQuantity = items.find((item) => item.productId === product.id)?.quantity ?? 0
+  const remainingStock = Math.max(0, product.stock - cartQuantity)
+  const isOutOfStock = product.stock <= 0
+  const isAtLimit = !isOutOfStock && remainingStock === 0
   let stockText = 'Out of stock'
   if (product.stock > 5) stockText = 'In stock'
   else if (product.stock > 0) stockText = `Only ${product.stock} left!`
+
+  function handleAddToCart() {
+    if (isOutOfStock || isAtLimit || !Number.isInteger(quantity) || quantity < 1 || quantity > remainingStock) {
+      setFeedback('Not enough stock available')
+      return
+    }
+
+    addItem(displayedProduct, quantity)
+    setFeedback('Added to cart')
+  }
 
   return (
     <section>
@@ -137,7 +155,10 @@ function ProductDetails({ productId }: { productId: number }) {
               <button
                 type="button"
                 aria-label="Decrease quantity"
-                onClick={() => setQuantity((current) => Math.max(1, current - 1))}
+                onClick={() => {
+                  setQuantity((current) => Math.max(1, current - 1))
+                  setFeedback('')
+                }}
                 disabled={quantity <= 1}
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-[var(--shop-text)] shadow-sm hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-40"
               >
@@ -149,7 +170,10 @@ function ProductDetails({ productId }: { productId: number }) {
               <button
                 type="button"
                 aria-label="Increase quantity"
-                onClick={() => setQuantity((current) => Math.min(product.stock, current + 1))}
+                onClick={() => {
+                  setQuantity((current) => Math.min(product.stock, current + 1))
+                  setFeedback('')
+                }}
                 disabled={quantity >= product.stock}
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-[var(--shop-text)] shadow-sm hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-40"
               >
@@ -157,6 +181,16 @@ function ProductDetails({ productId }: { productId: number }) {
               </button>
             </div>
           </div>
+
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            disabled={isOutOfStock || isAtLimit}
+            className="mt-6 inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--shop-primary)] px-6 font-medium text-white hover:bg-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isOutOfStock ? 'Out of stock' : isAtLimit ? 'Maximum in cart' : 'Add to cart'}
+          </button>
+          {feedback && <p role="status" className="mt-2 text-sm text-[var(--shop-accent)]">{feedback}</p>}
 
           <h2 className="mt-10 text-lg font-semibold text-[var(--shop-text)]">About this product</h2>
           <p className="mt-3 max-w-prose leading-7 text-[var(--shop-text)]">{product.description}</p>

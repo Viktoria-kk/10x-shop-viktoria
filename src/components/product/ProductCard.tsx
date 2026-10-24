@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useCart } from '../../context/cart-context'
 import type { Product } from '../../types/product'
 import { discountedPrice, formatPrice } from '../../utils/format'
 
@@ -7,7 +9,19 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product }: ProductCardProps) {
+  const { items, addItem } = useCart()
+  const [feedback, setFeedback] = useState('')
   const hasDiscount = product.discountPercentage >= 1
+  const cartQuantity = items.find((item) => item.productId === product.id)?.quantity ?? 0
+  const isOutOfStock = product.stock <= 0
+  const isAtLimit = !isOutOfStock && cartQuantity >= product.stock
+
+  function handleAddToCart() {
+    if (isOutOfStock || isAtLimit) return
+
+    addItem(product, 1)
+    setFeedback('Added to cart')
+  }
 
   return (
     <article className="min-w-0">
@@ -55,6 +69,16 @@ function ProductCard({ product }: ProductCardProps) {
       <p className="mt-2 text-sm text-[var(--shop-text)]">
         {product.stock > 0 ? 'In stock' : 'Out of stock'} · Rated {product.rating.toFixed(1)} / 5
       </p>
+
+      <button
+        type="button"
+        onClick={handleAddToCart}
+        disabled={isOutOfStock || isAtLimit}
+        className="mt-3 inline-flex min-h-11 items-center rounded-lg px-2 text-sm font-semibold text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {isOutOfStock ? 'Out of stock' : isAtLimit ? 'Maximum in cart' : 'Add to cart'}
+      </button>
+      {feedback && <p role="status" className="mt-1 text-sm text-[var(--shop-accent)]">{feedback}</p>}
     </article>
   )
 }
