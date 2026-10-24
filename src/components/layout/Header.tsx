@@ -7,13 +7,13 @@ const navigationItems = [
 ]
 
 const navigationItemClasses =
-  'inline-flex min-h-11 items-center rounded-md px-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400'
+  'inline-flex min-h-11 items-center rounded-md px-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]'
 
 function navigationLinkClasses(isActive: boolean) {
   return `${navigationItemClasses} ${
     isActive
-      ? 'bg-rose-100 text-rose-950 underline underline-offset-4'
-      : 'text-stone-700 hover:bg-rose-50 hover:text-rose-900'
+      ? 'text-[var(--shop-accent)] underline underline-offset-4'
+      : 'text-[var(--shop-text)] hover:text-[var(--shop-primary)] hover:underline hover:underline-offset-4'
   }`
 }
 
@@ -27,11 +27,11 @@ function Header() {
   }
 
   return (
-    <header className="border-b border-rose-100 bg-white">
+    <header className="border-b border-[var(--shop-background)] bg-white">
       <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-8">
         <Link
           to="/"
-          className="inline-flex min-h-11 items-center self-start rounded-md text-lg font-semibold tracking-tight text-rose-900 hover:text-rose-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-400"
+          className="inline-flex min-h-11 items-center self-start rounded-md text-lg font-semibold tracking-tight text-[var(--shop-primary)] hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
         >
           10X Shop
         </Link>
@@ -50,7 +50,7 @@ function Header() {
             <button
               type="button"
               onClick={handleLogout}
-              className={`${navigationItemClasses} cursor-pointer text-stone-700 hover:bg-rose-50 hover:text-rose-900`}
+              className={`${navigationItemClasses} cursor-pointer text-[var(--shop-text)] hover:text-[var(--shop-primary)] hover:underline hover:underline-offset-4`}
             >
               Log out
             </button>

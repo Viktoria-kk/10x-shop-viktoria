@@ -13,7 +13,7 @@ function ProductCard({ product }: ProductCardProps) {
     <article className="min-w-0">
       <Link
         to={`/products/${product.id}`}
-        className="group block rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#5E7192]"
+        className="group block rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--shop-accent)]"
       >
         <div className="aspect-square overflow-hidden rounded-2xl bg-white">
           <img
@@ -25,17 +25,17 @@ function ProductCard({ product }: ProductCardProps) {
             className="h-full w-full object-contain p-6"
           />
         </div>
-        <p className="mt-4 text-sm text-stone-600">
+        <p className="mt-4 text-sm text-[var(--shop-text)]">
           {product.category}
           {product.brand && <span> · {product.brand}</span>}
         </p>
-        <h2 className="mt-1 break-words text-lg font-semibold leading-snug text-stone-900 group-hover:text-[#5E7192]">
+        <h2 className="mt-1 break-words text-lg font-semibold leading-snug text-[var(--shop-text)] group-hover:text-[var(--shop-accent)]">
           {product.title}
         </h2>
       </Link>
 
       <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <span className="text-lg font-semibold text-stone-900">
+        <span className="text-lg font-semibold text-[var(--shop-text)]">
           {formatPrice(
             hasDiscount
               ? discountedPrice(product.price, product.discountPercentage)
@@ -44,15 +44,15 @@ function ProductCard({ product }: ProductCardProps) {
         </span>
         {hasDiscount && (
           <>
-            <span className="text-sm text-stone-600 line-through">{formatPrice(product.price)}</span>
-            <span className="text-sm font-medium text-rose-900">
+            <span className="text-sm text-[var(--shop-text)] line-through">{formatPrice(product.price)}</span>
+            <span className="text-sm font-medium text-[var(--shop-accent)]">
               {product.discountPercentage}% off
             </span>
           </>
         )}
       </div>
 
-      <p className="mt-2 text-sm text-stone-600">
+      <p className="mt-2 text-sm text-[var(--shop-text)]">
         {product.stock > 0 ? 'In stock' : 'Out of stock'} · Rated {product.rating.toFixed(1)} / 5
       </p>
     </article>

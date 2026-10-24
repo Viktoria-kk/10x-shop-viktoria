@@ -38,13 +38,13 @@ function CataloguePage() {
       </h1>
 
       {isLoading ? (
-        <p className="mt-8 text-stone-600" role="status">Loading products...</p>
+        <p className="mt-8 text-[var(--shop-text)]" role="status">Loading products...</p>
       ) : error ? (
-        <p className="mt-8 text-rose-800" role="alert">
+        <p className="mt-8 text-[var(--shop-accent)]" role="alert">
           Unable to load products. Please try again later.
         </p>
       ) : products.length === 0 ? (
-        <p className="mt-8 text-stone-600">No products found.</p>
+        <p className="mt-8 text-[var(--shop-text)]">No products found.</p>
       ) : (
         <ProductGrid products={products} />
       )}

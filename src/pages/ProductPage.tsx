@@ -42,12 +42,12 @@ function ProductDetails({ productId }: { productId: number }) {
   }, [productId])
 
   if (isLoading) {
-    return <p role="status" className="text-stone-600">Loading product...</p>
+    return <p role="status" className="text-[var(--shop-text)]">Loading product...</p>
   }
 
   if (hasError) {
     return (
-      <p role="alert" className="text-rose-800">
+      <p role="alert" className="text-[var(--shop-accent)]">
         Unable to load product. Please try again later.
       </p>
     )
@@ -65,7 +65,7 @@ function ProductDetails({ productId }: { productId: number }) {
     <section>
       <Link
         to="/"
-        className="inline-flex min-h-11 items-center rounded-lg text-sm font-medium text-[#5E7192] hover:text-rose-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5E7192]"
+        className="inline-flex min-h-11 items-center rounded-lg text-sm font-medium text-[var(--shop-accent)] hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
       >
         ← Back to catalogue
       </Link>
@@ -89,8 +89,8 @@ function ProductDetails({ productId }: { productId: number }) {
                 aria-label={`Show image ${index + 1} of ${product.title}`}
                 aria-pressed={selectedImageIndex === index}
                 onClick={() => setSelectedImageIndex(index)}
-                className={`h-16 w-16 cursor-pointer rounded-2xl bg-white p-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5E7192] ${
-                  selectedImageIndex === index ? 'ring-2 ring-[#5E7192]' : 'hover:ring-2 hover:ring-rose-200'
+                className={`h-16 w-16 cursor-pointer rounded-2xl bg-white p-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] ${
+                  selectedImageIndex === index ? 'ring-2 ring-[var(--shop-accent)]' : 'hover:ring-2 hover:ring-[var(--shop-accent)]'
                 }`}
               >
                 <img src={image} alt="" className="h-full w-full object-contain" />
@@ -100,15 +100,15 @@ function ProductDetails({ productId }: { productId: number }) {
         </div>
 
         <div className="min-w-0">
-          <p className="text-sm font-medium text-[#5E7192]">{product.category}</p>
-          <h1 className="mt-3 break-words text-3xl font-semibold tracking-tight text-stone-900 md:text-4xl">
+          <p className="text-sm font-medium text-[var(--shop-accent)]">{product.category}</p>
+          <h1 className="mt-3 break-words text-3xl font-semibold tracking-tight text-[var(--shop-text)] md:text-4xl">
             {product.title}
           </h1>
-          {product.brand && <p className="mt-3 text-stone-600">By {product.brand}</p>}
-          <p className="mt-4 text-sm text-stone-600">Rated {product.rating.toFixed(1)} out of 5</p>
+          {product.brand && <p className="mt-3 text-[var(--shop-text)]">By {product.brand}</p>}
+          <p className="mt-4 text-sm text-[var(--shop-text)]">Rated {product.rating.toFixed(1)} out of 5</p>
 
           <div className="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-2">
-            <span className="text-3xl font-semibold text-stone-900">
+            <span className="text-3xl font-semibold text-[var(--shop-text)]">
               {formatPrice(
                 hasDiscount
                   ? discountedPrice(product.price, product.discountPercentage)
@@ -117,8 +117,8 @@ function ProductDetails({ productId }: { productId: number }) {
             </span>
             {hasDiscount && (
               <>
-                <span className="text-stone-600 line-through">{formatPrice(product.price)}</span>
-                <span className="text-sm font-medium text-rose-900">
+                <span className="text-[var(--shop-text)] line-through">{formatPrice(product.price)}</span>
+                <span className="text-sm font-medium text-[var(--shop-accent)]">
                   {product.discountPercentage}% off
                 </span>
               </>
@@ -126,24 +126,24 @@ function ProductDetails({ productId }: { productId: number }) {
           </div>
 
           <p
-            className={`mt-5 text-sm font-medium ${product.stock > 5 ? 'text-[#5E7192]' : 'text-rose-800'}`}
+            className={`mt-5 text-sm font-medium ${product.stock > 5 ? 'text-[var(--shop-accent)]' : 'text-[var(--shop-primary)]'}`}
           >
             {stockText}
           </p>
 
           <div className="mt-8">
-            <p className="text-sm font-medium text-stone-800">Quantity</p>
+            <p className="text-sm font-medium text-[var(--shop-text)]">Quantity</p>
             <div className="mt-3 inline-flex items-center gap-4" role="group" aria-label="Quantity">
               <button
                 type="button"
                 aria-label="Decrease quantity"
                 onClick={() => setQuantity((current) => Math.max(1, current - 1))}
                 disabled={quantity <= 1}
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-stone-900 shadow-sm hover:bg-rose-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5E7192] disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-[var(--shop-text)] shadow-sm hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-40"
               >
                 −
               </button>
-              <span className="min-w-5 text-center font-medium text-stone-900" aria-live="polite">
+              <span className="min-w-5 text-center font-medium text-[var(--shop-text)]" aria-live="polite">
                 {product.stock === 0 ? 'Unavailable' : quantity}
               </span>
               <button
@@ -151,15 +151,15 @@ function ProductDetails({ productId }: { productId: number }) {
                 aria-label="Increase quantity"
                 onClick={() => setQuantity((current) => Math.min(product.stock, current + 1))}
                 disabled={quantity >= product.stock}
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-stone-900 shadow-sm hover:bg-rose-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5E7192] disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-[var(--shop-text)] shadow-sm hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-40"
               >
                 +
               </button>
             </div>
           </div>
 
-          <h2 className="mt-10 text-lg font-semibold text-stone-900">About this product</h2>
-          <p className="mt-3 max-w-prose leading-7 text-stone-700">{product.description}</p>
+          <h2 className="mt-10 text-lg font-semibold text-[var(--shop-text)]">About this product</h2>
+          <p className="mt-3 max-w-prose leading-7 text-[var(--shop-text)]">{product.description}</p>
         </div>
       </div>
     </section>

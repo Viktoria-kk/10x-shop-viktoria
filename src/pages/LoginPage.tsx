@@ -48,23 +48,23 @@ function LoginPage() {
   }
 
   const inputClasses =
-    'mt-2 block min-h-12 w-full rounded-xl border bg-[#FFF8FA] px-4 text-stone-900 outline-none transition-colors placeholder:text-stone-500 focus-visible:border-[#5E7192] focus-visible:ring-2 focus-visible:ring-[#CAD8ED]'
+    'mt-2 block min-h-12 w-full rounded-xl border bg-white px-4 text-[var(--shop-text)] outline-none transition-colors placeholder:text-[var(--shop-accent)] focus-visible:border-[var(--shop-accent)] focus-visible:ring-2 focus-visible:ring-[var(--shop-accent)]'
 
   return (
     <section className="mx-auto w-full max-w-md">
       <Link
         to="/"
-        className="inline-flex min-h-11 items-center rounded-lg text-sm font-medium text-[#5E7192] hover:text-rose-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5E7192]"
+        className="inline-flex min-h-11 items-center rounded-lg text-sm font-medium text-[var(--shop-accent)] hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
       >
         ← Back to catalogue
       </Link>
 
-      <h1 className="mt-8 text-4xl font-semibold tracking-tight text-stone-900">Log in</h1>
-      <p className="mt-3 text-stone-600">Enter your details to continue shopping.</p>
+      <h1 className="mt-8 text-4xl font-semibold tracking-tight text-[var(--shop-text)]">Log in</h1>
+      <p className="mt-3 text-[var(--shop-text)]">Enter your details to continue shopping.</p>
 
       <form className="mt-10 space-y-6" onSubmit={handleSubmit} noValidate>
         <div>
-          <label htmlFor="username" className="block text-sm font-medium text-stone-800">
+          <label htmlFor="username" className="block text-sm font-medium text-[var(--shop-text)]">
             Username
           </label>
           <input
@@ -76,17 +76,17 @@ function LoginPage() {
             onChange={(event) => updateField('username', event.target.value)}
             aria-invalid={Boolean(errors.username)}
             aria-describedby={errors.username ? 'username-error' : undefined}
-            className={`${inputClasses} ${errors.username ? 'border-rose-600' : 'border-rose-200'}`}
+            className={`${inputClasses} ${errors.username ? 'border-[var(--shop-primary)]' : 'border-[var(--shop-accent)]'}`}
           />
           {errors.username && (
-            <p id="username-error" className="mt-2 text-sm text-rose-800">
+            <p id="username-error" className="mt-2 text-sm text-[var(--shop-accent)]">
               {errors.username}
             </p>
           )}
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-stone-800">
+          <label htmlFor="password" className="block text-sm font-medium text-[var(--shop-text)]">
             Password
           </label>
           <input
@@ -98,10 +98,10 @@ function LoginPage() {
             onChange={(event) => updateField('password', event.target.value)}
             aria-invalid={Boolean(errors.password)}
             aria-describedby={errors.password ? 'password-error' : undefined}
-            className={`${inputClasses} ${errors.password ? 'border-rose-600' : 'border-rose-200'}`}
+            className={`${inputClasses} ${errors.password ? 'border-[var(--shop-primary)]' : 'border-[var(--shop-accent)]'}`}
           />
           {errors.password && (
-            <p id="password-error" className="mt-2 text-sm text-rose-800">
+            <p id="password-error" className="mt-2 text-sm text-[var(--shop-accent)]">
               {errors.password}
             </p>
           )}
@@ -109,7 +109,7 @@ function LoginPage() {
 
         <button
           type="submit"
-          className="min-h-12 w-full cursor-pointer rounded-xl bg-[#5E7192] px-5 font-medium text-white transition-colors hover:bg-[#4c5d7b] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5E7192]"
+          className="min-h-12 w-full cursor-pointer rounded-xl bg-[var(--shop-primary)] px-5 font-medium text-white transition-colors hover:bg-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
         >
           Log In
         </button>
