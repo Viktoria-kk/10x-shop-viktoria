@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { fetchProducts } from '../api/products.api'
+import ProductGrid from '../components/product/ProductGrid'
 import type { Product } from '../types/product'
 
 function CatalogPage() {
@@ -31,7 +32,7 @@ function CatalogPage() {
   }, [])
 
   return (
-    <section className="max-w-2xl" aria-labelledby="catalog-heading">
+    <section aria-labelledby="catalog-heading">
       <h1 id="catalog-heading" className="text-3xl font-bold tracking-tight md:text-4xl">
         Catalog
       </h1>
@@ -45,13 +46,7 @@ function CatalogPage() {
       ) : products.length === 0 ? (
         <p className="mt-8 text-stone-600">No products found.</p>
       ) : (
-        <ul className="mt-8 divide-y divide-rose-100">
-          {products.map((product) => (
-            <li key={product.id} className="break-words py-4 text-lg text-stone-800">
-              {product.title}
-            </li>
-          ))}
-        </ul>
+        <ProductGrid products={products} />
       )}
     </section>
   )
