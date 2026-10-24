@@ -2,7 +2,7 @@
 
 ## Project overview
 
-10X Shop is an English-language, responsive single-page storefront for an individual front-end graduation project. It gives a shopper a simple way to browse products, inspect one product, manage a cart, and place a simulated order. The main journey is catalog → product details → cart → protected checkout → local confirmation. The graduation goal is to demonstrate clear React and TypeScript architecture, reliable interaction and validation, responsive design, and an explainable development process. No real payment or authentication service is involved.
+10X Shop is an English-language, responsive single-page storefront for an individual front-end graduation project. It gives a shopper a simple way to browse products, inspect one product, manage a cart, and place a simulated order. The main journey is catalogue → product details → cart → protected checkout → local confirmation. The graduation goal is to demonstrate clear React and TypeScript architecture, reliable interaction and validation, responsive design, and an explainable development process. No real payment or authentication service is involved.
 
 ## Scope and priorities
 
@@ -10,7 +10,7 @@
 
 - A shared Header and Footer; routes for `/`, `/login`, `/products/:id`, `/cart`, `/checkout`, and `*`; a Not Found page for invalid routes and products.
 - Local authentication in `AuthContext`; a controlled Username and Password form with required validation; a protected checkout route that returns the shopper to checkout after login.
-- A DummyJSON catalog loaded with native `fetch` in `useEffect`; typed API data; loading, error, and empty states; reusable `ProductCard` and `ProductGrid` components.
+- A DummyJSON catalogue loaded with native `fetch` in `useEffect`; typed API data; loading, error, and empty states; reusable `ProductCard` and `ProductGrid` components.
 - A product details request to `GET /products/:id`, product images and information, and basic quantity selection.
 - A shared `CartContext` with immutable add, remove, and quantity updates, plus subtotal and total calculations.
 - A controlled checkout form for Full name, Email, Address, and City; required inline validation; local order confirmation; cart clearing after success.
@@ -29,7 +29,7 @@
 | TypeScript, strict mode | Types for API responses, props, forms, and shared state; early error detection. |
 | React Router | Client-side pages, product IDs, Not Found handling, and protected checkout navigation. |
 | Tailwind CSS v4 and `@tailwindcss/vite` | Responsive layout and interactive styling through Vite. |
-| DummyJSON products API | Remote catalog and product detail data. |
+| DummyJSON products API | Remote catalogue and product detail data. |
 | Native browser `fetch` | Direct API requests without an extra HTTP library. |
 | React Context | Shared authentication and cart state where multiple pages need it. |
 
@@ -70,16 +70,16 @@ Each row is a coherent, reviewable change that can support a meaningful commit. 
 | Protect checkout and preserve return destination | 1.5 | W2 | Signed-out checkout redirects to login, then returns. |
 | Show authentication state in the Header | 0.75 | W2 | Login/logout controls reflect current state. |
 
-### 4. Product Catalog
+### 4. Product Catalogue
 
 | Task | Hours | Phase | Done when |
 | --- | ---: | --- | --- |
-| Define typed DummyJSON product responses | 1 | W2 | Catalog data is handled without `any`. |
+| Define typed DummyJSON product responses | 1 | W2 | Catalogue data is handled without `any`. |
 | Add a small native-fetch products function | 1 | W2 | Non-success responses surface as errors. |
-| Load catalog data in the home page effect | 1.5 | W2 | Products appear after a successful request. |
-| Add catalog loading and error states | 1 | W2 | Waiting and failed requests are understandable. |
-| Add catalog empty state | 0.75 | W2 | An empty response has a useful message. |
-| Build reusable `ProductCard` and `ProductGrid` | 2 | W2 | Typed cards form a responsive catalog grid. |
+| Load catalogue data in the home page effect | 1.5 | W2 | Products appear after a successful request. |
+| Add catalogue loading and error states | 1 | W2 | Waiting and failed requests are understandable. |
+| Add catalogue empty state | 0.75 | W2 | An empty response has a useful message. |
+| Build reusable `ProductCard` and `ProductGrid` | 2 | W2 | Typed cards form a responsive catalogue grid. |
 
 ### 5. Product Details
 
@@ -137,7 +137,7 @@ Each row is a coherent, reviewable change that can support a meaningful commit. 
 | Official week | Dates | Priority |
 | --- | --- | --- |
 | Week 1 | October 17–23, 2026 | The official first week has elapsed. No completed work is claimed here because the repository does not show it. |
-| Week 2 | October 24–30, 2026 | Write the plan, establish the app foundation, then implement routes, local login, catalog, product details, and initial cart state. |
+| Week 2 | October 24–30, 2026 | Write the plan, establish the app foundation, then implement routes, local login, catalogue, product details, and initial cart state. |
 | Week 3 | October 31–November 6, 2026 | Complete cart and checkout, then reserve time for responsive and accessibility checks, bug fixes, docs, deployment, and route-refresh verification. |
 
 **Submission deadline:** November 6, 2026 at 23:59 Georgia time. As of October 24, protect the final days for verification and submission. If estimates slip, reduce polish and defer all FULL/BONUS ideas before cutting CORE behavior or quality gates.
@@ -153,7 +153,7 @@ Each row is a coherent, reviewable change that can support a meaningful commit. 
 
 ## CORE definition of done
 
-CORE is complete only when the catalog → detail → cart → protected checkout → confirmation journey works; every required page and interaction works; loading, error, empty, invalid-route, and invalid-product states behave correctly; and the Error Boundary displays its fallback when needed. `npm run typecheck`, `npm run lint`, and `npm run build` must pass. The app must work at 375px and desktop widths with no unintended horizontal scrolling. README.md and REPORT.md must accurately describe the implementation and genuine debugging issues. The Git history must reflect real development. A deployed Vercel or Netlify version must work, including direct URL refresh on routes such as `/products/5`.
+CORE is complete only when the catalogue → detail → cart → protected checkout → confirmation journey works; every required page and interaction works; loading, error, empty, invalid-route, and invalid-product states behave correctly; and the Error Boundary displays its fallback when needed. `npm run typecheck`, `npm run lint`, and `npm run build` must pass. The app must work at 375px and desktop widths with no unintended horizontal scrolling. README.md and REPORT.md must accurately describe the implementation and genuine debugging issues. The Git history must reflect real development. A deployed Vercel or Netlify version must work, including direct URL refresh on routes such as `/products/5`.
 
 ## Version control strategy
 

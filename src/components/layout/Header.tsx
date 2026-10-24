@@ -2,7 +2,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 
 const navigationItems = [
-  { label: 'Catalog', to: '/' },
+  { label: 'Catalogue', to: '/' },
   { label: 'Cart', to: '/cart' },
 ]
 

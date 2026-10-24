@@ -3,7 +3,7 @@ import { fetchProducts } from '../api/products.api'
 import ProductGrid from '../components/product/ProductGrid'
 import type { Product } from '../types/product'
 
-function CatalogPage() {
+function CataloguePage() {
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
@@ -32,9 +32,9 @@ function CatalogPage() {
   }, [])
 
   return (
-    <section aria-labelledby="catalog-heading">
-      <h1 id="catalog-heading" className="text-3xl font-bold tracking-tight md:text-4xl">
-        Catalog
+    <section aria-labelledby="catalogue-heading">
+      <h1 id="catalogue-heading" className="text-3xl font-bold tracking-tight md:text-4xl">
+        Catalogue
       </h1>
 
       {isLoading ? (
@@ -52,4 +52,4 @@ function CatalogPage() {
   )
 }
 
-export default CatalogPage
+export default CataloguePage

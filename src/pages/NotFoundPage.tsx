@@ -9,7 +9,7 @@ function NotFoundPage() {
         to="/"
         className="mt-6 inline-block font-medium text-slate-900 underline underline-offset-4 hover:text-slate-700 focus-visible:outline-2 focus-visible:outline-offset-4"
       >
-        Go to catalog
+        Go to catalogue
       </Link>
     </>
   )

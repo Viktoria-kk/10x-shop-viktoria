@@ -56,7 +56,7 @@ function LoginPage() {
         to="/"
         className="inline-flex min-h-11 items-center rounded-lg text-sm font-medium text-[#5E7192] hover:text-rose-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5E7192]"
       >
-        ← Back to catalog
+        ← Back to catalogue
       </Link>
 
       <h1 className="mt-8 text-4xl font-semibold tracking-tight text-stone-900">Log in</h1>
