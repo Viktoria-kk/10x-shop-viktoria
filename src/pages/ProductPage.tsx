@@ -45,14 +45,22 @@ function ProductDetails({ productId }: { productId: number }) {
   }, [productId])
 
   if (isLoading) {
-    return <p role="status" className="text-[var(--shop-text)]">Loading product...</p>
+    return (
+      <section>
+        <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">Product details</h1>
+        <p role="status" className="mt-8 text-[var(--shop-text)]">Loading product...</p>
+      </section>
+    )
   }
 
   if (hasError) {
     return (
-      <p role="alert" className="text-[var(--shop-accent)]">
-        Unable to load product. Please try again later.
-      </p>
+      <section>
+        <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">Product details</h1>
+        <p role="alert" className="mt-8 text-[var(--shop-accent)]">
+          Unable to load product. Please try again later.
+        </p>
+      </section>
     )
   }
 
@@ -65,6 +73,7 @@ function ProductDetails({ productId }: { productId: number }) {
   const remainingStock = Math.max(0, product.stock - cartQuantity)
   const isOutOfStock = product.stock <= 0
   const isAtLimit = !isOutOfStock && remainingStock === 0
+  const cartButtonText = isOutOfStock ? 'Out of stock' : isAtLimit ? 'Maximum in cart' : 'Add to cart'
   let stockText = 'Out of stock'
   if (product.stock > 5) stockText = 'In stock'
   else if (product.stock > 0) stockText = `Only ${product.stock} left!`
@@ -107,11 +116,16 @@ function ProductDetails({ productId }: { productId: number }) {
                 aria-label={`Show image ${index + 1} of ${product.title}`}
                 aria-pressed={selectedImageIndex === index}
                 onClick={() => setSelectedImageIndex(index)}
-                className={`h-16 w-16 cursor-pointer rounded-2xl bg-white p-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] ${
+                className={`relative h-16 w-16 cursor-pointer rounded-2xl bg-white p-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] ${
                   selectedImageIndex === index ? 'ring-2 ring-[var(--shop-accent)]' : 'hover:ring-2 hover:ring-[var(--shop-accent)]'
                 }`}
               >
                 <img src={image} alt="" className="h-full w-full object-contain" />
+                {selectedImageIndex === index && (
+                  <span aria-hidden="true" className="absolute right-0 bottom-0 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--shop-primary)] text-xs font-bold text-white">
+                    ✓
+                  </span>
+                )}
               </button>
             ))}
           </div>
@@ -151,16 +165,16 @@ function ProductDetails({ productId }: { productId: number }) {
 
           <div className="mt-8">
             <p className="text-sm font-medium text-[var(--shop-text)]">Quantity</p>
-            <div className="mt-3 inline-flex items-center gap-4" role="group" aria-label="Quantity">
+            <div className="mt-3 inline-flex items-center gap-4" role="group" aria-label={`Quantity of ${product.title}`}>
               <button
                 type="button"
-                aria-label="Decrease quantity"
+                aria-label={`Decrease quantity of ${product.title}`}
                 onClick={() => {
                   setQuantity((current) => Math.max(1, current - 1))
                   setFeedback('')
                 }}
                 disabled={quantity <= 1}
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-[var(--shop-text)] shadow-sm hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-[var(--shop-text)] shadow-sm hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 −
               </button>
@@ -169,13 +183,13 @@ function ProductDetails({ productId }: { productId: number }) {
               </span>
               <button
                 type="button"
-                aria-label="Increase quantity"
+                aria-label={`Increase quantity of ${product.title}`}
                 onClick={() => {
                   setQuantity((current) => Math.min(product.stock, current + 1))
                   setFeedback('')
                 }}
                 disabled={quantity >= product.stock}
-                className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-[var(--shop-text)] shadow-sm hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-[var(--shop-text)] shadow-sm hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 +
               </button>
@@ -185,12 +199,15 @@ function ProductDetails({ productId }: { productId: number }) {
           <button
             type="button"
             onClick={handleAddToCart}
+            aria-label={`${cartButtonText}: ${product.title}`}
             disabled={isOutOfStock || isAtLimit}
-            className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[var(--shop-primary)] px-6 font-medium text-white hover:bg-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+            className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[var(--shop-primary)] px-6 font-medium text-white hover:bg-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
-            {isOutOfStock ? 'Out of stock' : isAtLimit ? 'Maximum in cart' : 'Add to cart'}
+            {cartButtonText}
           </button>
-          {feedback && <p role="status" className="mt-2 text-sm text-[var(--shop-accent)]">{feedback}</p>}
+          <p role="status" className={feedback ? 'mt-2 text-sm text-[var(--shop-accent)]' : 'sr-only'}>
+            {feedback}
+          </p>
 
           <h2 className="mt-10 text-lg font-semibold text-[var(--shop-text)]">About this product</h2>
           <p className="mt-3 max-w-prose break-words leading-7 text-[var(--shop-text)]">{product.description}</p>

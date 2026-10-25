@@ -74,7 +74,7 @@ function CheckoutPage() {
 
   if (completedOrder !== null) {
     return (
-      <section className="mx-auto max-w-2xl break-words text-center">
+      <section role="status" className="mx-auto max-w-2xl break-words text-center">
         <h1 className="text-3xl font-semibold tracking-tight text-[var(--shop-text)] md:text-4xl">
           Thank you! Your order has been placed.
         </h1>
@@ -127,7 +127,7 @@ function CheckoutPage() {
                   className={`${inputClasses} ${error ? 'border-[var(--shop-primary)]' : 'border-[var(--shop-accent)]'}`}
                 />
                 {error && (
-                  <p id={errorId} className="mt-2 text-sm text-[var(--shop-accent)]">
+                  <p id={errorId} role="alert" className="mt-2 text-sm text-[var(--shop-accent)]">
                     {error}
                   </p>
                 )}

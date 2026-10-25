@@ -40,23 +40,24 @@ function CartItemRow({ item, onQuantityChange, onRemove }: CartItemRowProps) {
               aria-label={`Decrease quantity of ${item.title}`}
               onClick={() => onQuantityChange(item.productId, item.quantity - 1)}
               disabled={!canDecrease}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-[var(--shop-text)] hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-[var(--shop-text)] hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-60"
             >
               −
             </button>
-            <span className="min-w-5 text-center font-medium text-[var(--shop-text)]">{item.quantity}</span>
+            <span aria-live="polite" className="min-w-5 text-center font-medium text-[var(--shop-text)]">{item.quantity}</span>
             <button
               type="button"
               aria-label={`Increase quantity of ${item.title}`}
               onClick={() => onQuantityChange(item.productId, item.quantity + 1)}
               disabled={!canIncrease}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-[var(--shop-text)] hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-40"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-[var(--shop-text)] hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-60"
             >
               +
             </button>
           </div>
           <button
             type="button"
+            aria-label={`Remove ${item.title} from cart`}
             onClick={() => onRemove(item.productId)}
             className="min-h-11 rounded-lg px-1 text-sm font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
           >

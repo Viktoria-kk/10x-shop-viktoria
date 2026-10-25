@@ -72,6 +72,7 @@ function LoginPage() {
             name="username"
             type="text"
             autoComplete="username"
+            required
             value={values.username}
             onChange={(event) => updateField('username', event.target.value)}
             aria-invalid={Boolean(errors.username)}
@@ -79,7 +80,7 @@ function LoginPage() {
             className={`${inputClasses} ${errors.username ? 'border-[var(--shop-primary)]' : 'border-[var(--shop-accent)]'}`}
           />
           {errors.username && (
-            <p id="username-error" className="mt-2 text-sm text-[var(--shop-accent)]">
+            <p id="username-error" role="alert" className="mt-2 text-sm text-[var(--shop-accent)]">
               {errors.username}
             </p>
           )}
@@ -94,6 +95,7 @@ function LoginPage() {
             name="password"
             type="password"
             autoComplete="current-password"
+            required
             value={values.password}
             onChange={(event) => updateField('password', event.target.value)}
             aria-invalid={Boolean(errors.password)}
@@ -101,7 +103,7 @@ function LoginPage() {
             className={`${inputClasses} ${errors.password ? 'border-[var(--shop-primary)]' : 'border-[var(--shop-accent)]'}`}
           />
           {errors.password && (
-            <p id="password-error" className="mt-2 text-sm text-[var(--shop-accent)]">
+            <p id="password-error" role="alert" className="mt-2 text-sm text-[var(--shop-accent)]">
               {errors.password}
             </p>
           )}

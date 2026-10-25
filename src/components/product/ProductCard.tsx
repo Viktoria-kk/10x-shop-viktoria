@@ -15,6 +15,7 @@ function ProductCard({ product }: ProductCardProps) {
   const cartQuantity = items.find((item) => item.productId === product.id)?.quantity ?? 0
   const isOutOfStock = product.stock <= 0
   const isAtLimit = !isOutOfStock && cartQuantity >= product.stock
+  const cartButtonText = isOutOfStock ? 'Out of stock' : isAtLimit ? 'Maximum in cart' : 'Add to cart'
 
   function handleAddToCart() {
     if (isOutOfStock || isAtLimit) return
@@ -73,12 +74,15 @@ function ProductCard({ product }: ProductCardProps) {
       <button
         type="button"
         onClick={handleAddToCart}
+        aria-label={`${cartButtonText}: ${product.title}`}
         disabled={isOutOfStock || isAtLimit}
-        className="mt-3 inline-flex min-h-11 items-center rounded-lg px-2 text-sm font-semibold text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-3 inline-flex min-h-11 items-center rounded-lg px-2 text-sm font-semibold text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isOutOfStock ? 'Out of stock' : isAtLimit ? 'Maximum in cart' : 'Add to cart'}
+        {cartButtonText}
       </button>
-      {feedback && <p role="status" className="mt-1 text-sm text-[var(--shop-accent)]">{feedback}</p>}
+      <p role="status" className={feedback ? 'mt-1 text-sm text-[var(--shop-accent)]' : 'sr-only'}>
+        {feedback}
+      </p>
     </article>
   )
 }
