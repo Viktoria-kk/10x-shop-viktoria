@@ -6,7 +6,7 @@
 
 ## Hosting Platform
 
-I prepared the repository for **Netlify** because no hosting provider was previously configured. The source remains in the existing GitHub repository; Netlify can build and publish it when I connect the repository later. No hosting account was accessed for this commit.
+I prepared the repository for **Vercel**. The source remains in the existing GitHub repository; Vercel can build and publish it when I connect the repository later. No hosting account was accessed for this change.
 
 ## Production Build
 
@@ -14,13 +14,15 @@ Run `npm run build` from the repository root. The script runs `tsc --noEmit` and
 
 ## Deployment Configuration
 
-The only hosting-specific rule is in [`public/_redirects`](../public/_redirects):
+The only hosting-specific rule is in the root-level [`vercel.json`](../vercel.json), following [Vercel's Vite SPA guidance](https://vercel.com/docs/frameworks/frontend/vite):
 
-```text
-/* /index.html 200
+```json
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
 ```
 
-Vite copies files from `public/` into the root of `dist/`. The local build confirmed that `dist/_redirects` exists with this exact rule. It is an unforced Netlify rewrite, so existing files such as `/assets/...` are served normally.
+Vercel reads this file from the repository root when it deploys. Its rewrites check for existing files first, so the built CSS and JavaScript under `/assets/` can still be served normally. The configuration is not copied into `dist/` by Vite.
 
 ## SPA Routing
 
@@ -32,12 +34,12 @@ React Router handles `/`, `/login`, `/products/:id`, `/cart`, `/checkout` and un
 
 When I am ready to publish:
 
-1. In Netlify, import the existing GitHub repository `Viktoria-kk/10x-shop-viktoria` from its `main` branch.
-2. Use the repository root as the base directory, `npm run build` as the build command, and `dist` as the publish directory.
+1. In Vercel, import the existing GitHub repository `Viktoria-kk/10x-shop-viktoria` from its `main` branch.
+2. Select the Vite framework preset and the repository root. Set the build command to `npm run build` and the output directory to `dist`.
 3. Deploy the site, then record its real public URL in `README.md`.
 4. Run the live checks below before describing the deployment as working.
 
-The current source does not require environment variables. If Netlify's build fails, check its Node.js version against the project tooling; the local build used Node.js 22.16.0.
+The current source does not require environment variables. If Vercel's build fails, check its Node.js version against the project tooling; the local build used Node.js 22.16.0.
 
 ## Verification Checklist
 
@@ -66,8 +68,8 @@ The current source does not require environment variables. If Netlify's build fa
 
 ## Known Limitations
 
-Static hosting does not add a backend. Login is local state, cart data is browser `localStorage`, Checkout is a local simulation, and no payment is processed. The application needs client-side JavaScript and access to DummyJSON for product data. The SPA rewrite is configured locally, but direct-route behaviour on Netlify still needs live verification.
+Static hosting does not add a backend. Login is local state, cart data is browser `localStorage`, Checkout is a local simulation, and no payment is processed. The application needs client-side JavaScript and access to DummyJSON for product data. The SPA rewrite is configured locally, but direct-route behaviour on Vercel still needs live verification.
 
 ## Deployment Status
 
-**Prepared, not deployed.** The production build and copied `_redirects` file were verified locally. There is no verified public URL or hosted test result yet.
+**Prepared, not deployed.** The production build and root-level `vercel.json` were verified locally. There is no verified public URL or hosted test result yet.
