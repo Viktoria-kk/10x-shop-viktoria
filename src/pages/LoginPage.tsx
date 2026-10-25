@@ -48,7 +48,7 @@ function LoginPage() {
   }
 
   const inputClasses =
-    'mt-2 block min-h-12 w-full rounded-xl border bg-white px-4 text-[var(--shop-text)] outline-none transition-colors placeholder:text-[var(--shop-accent)] focus-visible:border-[var(--shop-accent)] focus-visible:ring-2 focus-visible:ring-[var(--shop-accent)]'
+    'mt-2 block min-h-12 w-full rounded-xl border bg-white px-4 text-[var(--shop-text)] outline-none transition-colors focus-visible:border-[var(--shop-accent)] focus-visible:ring-2 focus-visible:ring-[var(--shop-accent)]'
 
   return (
     <section className="mx-auto w-full max-w-md">
@@ -61,6 +61,9 @@ function LoginPage() {
 
       <h1 className="mt-8 text-3xl font-semibold tracking-tight text-[var(--shop-text)] sm:text-4xl">Log in</h1>
       <p className="mt-3 text-[var(--shop-text)]">Enter your details to continue shopping.</p>
+      <p className="mt-2 text-sm text-[var(--shop-text)]">
+        Demo log in: no account is verified or saved.
+      </p>
 
       <form className="mt-8 space-y-6 sm:mt-10" onSubmit={handleSubmit} noValidate>
         <div>
@@ -80,7 +83,7 @@ function LoginPage() {
             className={`${inputClasses} ${errors.username ? 'border-[var(--shop-primary)]' : 'border-[var(--shop-accent)]'}`}
           />
           {errors.username && (
-            <p id="username-error" role="alert" className="mt-2 text-sm text-[var(--shop-accent)]">
+            <p id="username-error" role="alert" className="mt-2 break-words text-sm text-[var(--shop-accent)]">
               {errors.username}
             </p>
           )}
@@ -103,7 +106,7 @@ function LoginPage() {
             className={`${inputClasses} ${errors.password ? 'border-[var(--shop-primary)]' : 'border-[var(--shop-accent)]'}`}
           />
           {errors.password && (
-            <p id="password-error" role="alert" className="mt-2 text-sm text-[var(--shop-accent)]">
+            <p id="password-error" role="alert" className="mt-2 break-words text-sm text-[var(--shop-accent)]">
               {errors.password}
             </p>
           )}

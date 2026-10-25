@@ -33,7 +33,7 @@ The statuses below describe what the source and project records support. **Imple
 | Cart quantity updates, Remove and Clear | CORE | Implemented | Cart actions and empty state are present. |
 | Cart item count and totals | CORE | Implemented | Totals derive from discounted prices and quantities. |
 | Controlled Checkout and validation | CORE | Implemented | Required fields have inline errors. |
-| Local confirmation and cart clearing | CORE | Implemented | Submission records a confirmation before clearing the cart. |
+| Local confirmation and cart clearing | CORE | Implemented | Submission captures a confirmation before clearing the cart; the button is disabled during placement and repeated submits are guarded. |
 | Responsive layout and interaction states | CORE | Partially implemented | Responsive classes and focus, hover and disabled styles exist; viewport behaviour is not verified. |
 | Error Boundary | CORE | Implemented | Render-error fallback offers Reload. |
 | Debugging record | CORE | Partially implemented | Three documented cases have different evidence strengths; one failing draft is absent from Git. |
@@ -70,7 +70,7 @@ Second, Product Details had an `<h1>` in its success view but not in its early l
 
 ## 8. Testing and Quality
 
-`npm run typecheck`, `npm run lint` and `npm run build` pass after the optional Sign up addition. The [CORE test checklist](docs/CORE_TEST_CHECKLIST.md) records focused mocked harness passes for API responses, remaining-stock controls, cart operations and saved-data handling, local login and route protection, and Checkout validation and confirmation. Those checks are useful evidence for particular behaviours, but they are not a browser test of the full journey or the new Sign up flow. The source also includes loading and error messages, guarded storage access and an Error Boundary.
+`npm run typecheck`, `npm run lint` and `npm run build` pass after the authentication and Checkout refinement. The [CORE test checklist](docs/CORE_TEST_CHECKLIST.md) records focused mocked harness passes for API responses, remaining-stock controls, cart operations and saved-data handling, local login and route protection, and Checkout validation and confirmation. Those checks are useful evidence for particular behaviours, but they are not a browser test of the full journey, the Sign up flow or this submission guard. The source also includes loading and error messages, guarded storage access and an Error Boundary.
 
 The [compatibility review](COMPATIBILITY.md) leaves Chrome, Firefox and mobile-sized browser scenarios **NOT TESTED**. Keyboard and screen-reader use, a complete shopping journey, direct-route refreshes and 375px overflow are also unverified in the recorded checklist. The [performance notes](docs/PERFORMANCE_NOTES.md) contain build observations but no measured runtime improvement or Lighthouse audit. This distinction matters because a passing static check cannot prove that the interface behaves correctly in every browser.
 
@@ -86,16 +86,16 @@ These values come from the current checks and Git history. Bundle sizes are Vite
 
 | Metric | Value | Notes |
 | --- | --- | --- |
-| TypeScript check | Pass | `npm run typecheck` after Sign up. |
-| ESLint | Pass | `npm run lint` after Sign up. |
-| Production build | Pass | `npm run build` after Sign up. |
-| Main JavaScript bundle | 293.87 kB; 89.35 kB gzip | Current Vite build output after Sign up. |
-| Main CSS bundle | 18.33 kB; 4.29 kB gzip | Current Vite build output. |
+| TypeScript check | Pass | `npm run typecheck` after the authentication and Checkout refinement. |
+| ESLint | Pass | `npm run lint` after the authentication and Checkout refinement. |
+| Production build | Pass | `npm run build` after the authentication and Checkout refinement. |
+| Main JavaScript bundle | 294.34 kB; 89.43 kB gzip | Current Vite build output. |
+| Main CSS bundle | 18.25 kB; 4.28 kB gzip | Current Vite build output. |
 | Lighthouse Performance | Not measured | No saved audit. |
 | Lighthouse Accessibility | Not measured | No saved audit. |
 | Lighthouse Best Practices | Not measured | No saved audit. |
 | Lighthouse CLS | Not measured | No saved audit. |
-| Total Git commits | 34 | `main`, including the later Sign up commit. |
+| Total Git commits | 35 | `main`, including the authentication and Checkout refinement. |
 | Pull requests | Not verified | No repository count established. |
 | Closed issues | Not verified | No repository count established. |
 | Time per workstream | Not tracked | PLAN estimates are not actual time records. |

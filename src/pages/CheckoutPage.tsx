@@ -1,10 +1,17 @@
 import { useRef, useState, type FormEvent } from 'react'
+import { flushSync } from 'react-dom'
 import { Link, Navigate } from 'react-router-dom'
 import { useCart } from '../context/cart-context'
 import type { CheckoutFormValues } from '../types/checkout'
 import { discountedPrice, formatPrice } from '../utils/format'
 
 type CheckoutErrors = Partial<Record<keyof CheckoutFormValues, string>>
+
+interface CompletedOrder {
+  customerName: string
+  itemCount: number
+  total: number
+}
 
 const checkoutFields = [
   { name: 'fullName', label: 'Full name', type: 'text', autoComplete: 'name' },
@@ -44,11 +51,9 @@ function CheckoutPage() {
     city: '',
   })
   const [errors, setErrors] = useState<CheckoutErrors>({})
-  const [completedOrder, setCompletedOrder] = useState<{
-    customerName: string
-    itemCount: number
-    total: number
-  } | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [completedOrder, setCompletedOrder] = useState<CompletedOrder | null>(null)
+  const [submissionError, setSubmissionError] = useState('')
   const orderPlaced = useRef(false)
 
   function updateField(field: keyof CheckoutFormValues, value: string) {
@@ -67,9 +72,20 @@ function CheckoutPage() {
     setErrors(nextErrors)
     if (Object.values(nextErrors).some(Boolean) || items.length === 0) return
 
+    setSubmissionError('')
     orderPlaced.current = true
-    setCompletedOrder({ customerName: values.fullName.trim(), itemCount, total })
-    clearCart()
+    const order: CompletedOrder = { customerName: values.fullName.trim(), itemCount, total }
+
+    try {
+      flushSync(() => setIsSubmitting(true))
+      clearCart()
+      setCompletedOrder(order)
+    } catch {
+      orderPlaced.current = false
+      setSubmissionError('Unable to place your order. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (completedOrder !== null) {
@@ -136,10 +152,16 @@ function CheckoutPage() {
           })}
           <button
             type="submit"
-            className="min-h-12 w-full cursor-pointer rounded-xl bg-[var(--shop-primary)] px-6 font-medium text-white hover:bg-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] sm:w-auto"
+            disabled={isSubmitting}
+            className="min-h-12 w-full cursor-pointer rounded-xl bg-[var(--shop-primary)] px-6 font-medium text-white hover:bg-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
             Place order
           </button>
+          {submissionError && (
+            <p role="alert" className="break-words text-sm text-[var(--shop-accent)]">
+              {submissionError}
+            </p>
+          )}
         </form>
 
         <section aria-labelledby="order-summary-heading" className="min-w-0 self-start rounded-3xl bg-white p-5 sm:p-8">

@@ -13,7 +13,7 @@ I use this project to demonstrate routing, reusable components, shared state, co
 - A shared cart with quantity changes, Remove and Clear cart actions, discounted totals and a Header item count. Cart items are saved in browser `localStorage`.
 - A local Login form with validation, plus a protected Checkout route that sends guests to Login and returns them to Checkout afterwards.
 - An optional local Sign up demonstration with four validated fields. It uses the same temporary login state and can return guests to Checkout.
-- A controlled Checkout form with inline validation and an order summary. A valid submission shows a local confirmation and clears the cart; it does not process a payment.
+- A controlled Checkout form with inline validation and an order summary. A valid submission prevents repeat orders, shows a local confirmation and clears the cart; it does not process a payment.
 - Not Found handling for unknown routes or invalid products, and an application Error Boundary with a Reload fallback for unexpected render errors.
 
 ## Technologies Used
