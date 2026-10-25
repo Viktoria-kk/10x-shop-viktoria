@@ -76,7 +76,7 @@ The Login form accepts any non-empty username and a password of at least six cha
 
 ## Live Demo
 
-Deployment link will be added after deployment.
+Deployment link will be added after deployment. The repository is prepared for Netlify; [deployment instructions](docs/DEPLOYMENT.md) explain how to publish and verify it.
 
 ## Testing and Quality
 
