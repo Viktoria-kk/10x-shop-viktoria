@@ -2,15 +2,15 @@
 
 ## Overview
 
-10X Shop is a React single-page application. Vite builds its HTML, CSS and JavaScript into static files, so it can be hosted without an application server. This document records preparation, not a completed deployment.
+10X Shop is a React single-page application. Vite builds its HTML, CSS and JavaScript into static files, so it can be hosted without an application server. The project is deployed at [10x-shop-viktoria.vercel.app](https://10x-shop-viktoria.vercel.app/); I have confirmed that the website works. The detailed hosted checks below have not been recorded.
 
 ## Hosting Platform
 
-I prepared the repository for **Vercel**. The source remains in the existing GitHub repository; Vercel can build and publish it when I connect the repository later. No hosting account was accessed for this change.
+I use **Vercel** for the public site. The source is in the [GitHub repository](https://github.com/Viktoria-kk/10x-shop-viktoria). The repository files do not establish whether automatic GitHub-to-Vercel deployment is configured.
 
 ## Production Build
 
-Run `npm run build` from the repository root. The script runs `tsc --noEmit` and then `vite build`, writing output to `dist/`. The local build passed and produced `dist/index.html`, a JavaScript bundle and a CSS bundle. Vite reported **289.45 kB JavaScript** (**88.77 kB gzip**) and **18.31 kB CSS** (**4.28 kB gzip**). Product images are requested from DummyJSON URLs rather than copied into the build. `dist/` is generated and ignored by Git.
+Run `npm run build` from the repository root. The script runs `tsc --noEmit` and then `vite build`, writing output to `dist/`. The local build passed and produced `dist/index.html`, a JavaScript bundle and a CSS bundle. Vite reported **289.45 kB JavaScript** (**88.77 kB gzip**) and **18.33 kB CSS** (**4.29 kB gzip**). Product images are requested from DummyJSON URLs rather than copied into the build. `dist/` is generated and ignored by Git.
 
 ## Deployment Configuration
 
@@ -30,20 +30,22 @@ React Router handles `/`, `/login`, `/products/:id`, `/cart`, `/checkout` and un
 
 `/checkout` remains protected. A guest is redirected to `/login`; after local login, the app returns to Checkout when the cart has items. An empty cart redirects to `/cart`. Refreshing resets the simulated login state because it is held only in React Context.
 
-## Deployment Steps
+## Build Settings for Redeployment
 
-When I am ready to publish:
+The repository's Vite build settings are:
 
-1. In Vercel, import the existing GitHub repository `Viktoria-kk/10x-shop-viktoria` from its `main` branch.
-2. Select the Vite framework preset and the repository root. Set the build command to `npm run build` and the output directory to `dist`.
-3. Deploy the site, then record its real public URL in `README.md`.
-4. Run the live checks below before describing the deployment as working.
+- Framework preset: Vite.
+- Project root: repository root.
+- Build command: `npm run build`.
+- Output directory: `dist`.
+
+These are the required project settings for a Vercel redeployment; the repository does not record the hosted dashboard settings. Run the live checks below and record each observed result before claiming that a particular route or interaction has passed.
 
 The current source does not require environment variables. If Vercel's build fails, check its Node.js version against the project tooling; the local build used Node.js 22.16.0.
 
 ## Verification Checklist
 
-**All hosted checks are PENDING.** Tick an item only after observing it on the deployed URL.
+**Detailed hosted checks are PENDING.** The website has been confirmed working in general, but the individual scenarios below have not been recorded. Tick an item only after observing it on the deployed URL.
 
 - [ ] The root URL loads the application and Catalogue products appear.
 - [ ] Product images load without broken links.
@@ -72,4 +74,4 @@ Static hosting does not add a backend. Login is local state, cart data is browse
 
 ## Deployment Status
 
-**Prepared, not deployed.** The production build and root-level `vercel.json` were verified locally. There is no verified public URL or hosted test result yet.
+**Deployed on Vercel:** [https://10x-shop-viktoria.vercel.app/](https://10x-shop-viktoria.vercel.app/). I have confirmed the public website works. The production build and root-level `vercel.json` were verified locally; the detailed hosted checklist remains pending.

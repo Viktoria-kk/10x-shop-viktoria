@@ -76,7 +76,7 @@ The Login form accepts any non-empty username and a password of at least six cha
 
 ## Live Demo
 
-Deployment link will be added after deployment. The repository is prepared for Vercel; [deployment instructions](docs/DEPLOYMENT.md) explain how to publish and verify it.
+The [live Vercel demo](https://10x-shop-viktoria.vercel.app/) is available. See the [deployment guide](docs/DEPLOYMENT.md) for build settings, SPA routing and outstanding hosted checks.
 
 ## Testing and Quality
 
