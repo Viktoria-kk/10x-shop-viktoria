@@ -8,7 +8,7 @@ I use this project to demonstrate routing, reusable components, shared state, co
 
 ## Features
 
-- A storefront homepage with an editorial hero and featured products loaded from DummyJSON.
+- A storefront homepage with an editorial perfume photograph, featured DummyJSON products and the complete Catalogue below the landing sections.
 - A Catalogue that requests 12 DummyJSON products, with a responsive grid, product cards and loading, error and empty states.
 - Product Details with images, thumbnail selection, stock-aware quantity controls and Add to cart.
 - A shared cart with quantity changes, Remove and Clear cart actions, discounted totals and a Header item count. Cart items are saved in browser `localStorage`.
@@ -49,7 +49,7 @@ The API functions fetch product data for the pages. Pages pass products to reusa
 
 ## How It Works
 
-The main route is **Home → Catalogue → Product Details → Add to cart → Cart → Login or Sign up if needed → Checkout → Order confirmation**. Home at `/` introduces the shop with selected API-backed products; `/catalogue` contains the complete product grid. Product requests go to DummyJSON. The cart lives in React Context and is also saved under `shop_cart` in `localStorage`. Login and Sign up only change local React state; neither verifies credentials against a server nor creates a permanent account. Checkout reads the cart totals, validates the form, shows a confirmation and clears the cart without sending an order to a server.
+The main route is **Home → Catalogue → Product Details → Add to cart → Cart → Login or Sign up if needed → Checkout → Order confirmation**. Home at `/` introduces the shop with selected API-backed products and the full Catalogue below; its Shop now link jumps to that section. The complete product grid also remains at `/catalogue`. Product requests go to DummyJSON. The cart lives in React Context and is also saved under `shop_cart` in `localStorage`. Login and Sign up only change local React state; neither verifies credentials against a server nor creates a permanent account. Checkout reads the cart totals, validates the form, shows a confirmation and clears the cart without sending an order to a server.
 
 ## Getting Started
 
@@ -100,4 +100,4 @@ I wanted the interface to feel restrained and spacious, with clear typography an
 
 ## Credits
 
-DummyJSON supplies the product data. React, TypeScript, Vite, Tailwind CSS and React Router provide the tools used to build the application. I used AI assistance for implementation suggestions, debugging review and documentation support; I am responsible for reviewing the result and understanding the code. A fuller reflection on that assistance belongs in the separate project report.
+DummyJSON supplies the product data. The editorial hero photograph is by [Kaboompics on Pexels](https://www.pexels.com/photo/close-up-shot-of-a-perfume-bottle-on-the-sand-8361545/), used under the [Pexels Licence](https://www.pexels.com/license/); it does not depict a catalogue product. React, TypeScript, Vite, Tailwind CSS and React Router provide the tools used to build the application. I used AI assistance for implementation suggestions, debugging review and documentation support; I am responsible for reviewing the result and understanding the code. A fuller reflection on that assistance belongs in the separate project report.

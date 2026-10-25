@@ -30,7 +30,6 @@ function HomePage() {
     }
   }, [])
 
-  const heroProduct = products[0]
   const editorialProduct = products[4]
 
   return (
@@ -43,56 +42,24 @@ function HomePage() {
           <p className="mt-6 max-w-lg text-lg leading-8 text-[var(--shop-text)]">
             Browse the collection, explore the details, and find your next favourite.
           </p>
-          <Link
-            to="/catalogue"
+          <a
+            href="#catalogue"
             className="mt-8 inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--shop-primary)] px-7 text-center font-medium text-white transition-colors hover:bg-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
           >
-            Shop the catalogue
-          </Link>
+            Shop now
+          </a>
         </div>
 
-        <div className="flex min-h-80 min-w-0 flex-col justify-center overflow-hidden rounded-3xl bg-white p-6 sm:min-h-96 sm:p-8 md:min-h-[28rem]">
-          {heroProduct ? (
-            <Link
-              to={`/products/${heroProduct.id}`}
-              className="group flex min-h-0 flex-1 flex-col rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--shop-accent)]"
-            >
-              <div className="relative flex min-h-52 flex-1 items-center justify-center">
-                <span aria-hidden="true" className="p-8 text-center text-[var(--shop-text)]">
-                  {heroProduct.title}
-                </span>
-                {heroProduct.thumbnail?.trim() && (
-                  <img
-                    src={heroProduct.thumbnail}
-                    alt={heroProduct.title}
-                    width={400}
-                    height={400}
-                    fetchPriority="high"
-                    onError={(event) => {
-                      event.currentTarget.style.display = 'none'
-                    }}
-                    className="absolute inset-0 h-full w-full bg-white object-contain"
-                  />
-                )}
-              </div>
-              <div className="mt-6 border-t border-[var(--shop-background)] pt-5">
-                <p className="text-sm text-[var(--shop-accent)]">Discover this product</p>
-                <p className="mt-1 break-words text-lg font-semibold text-[var(--shop-text)] group-hover:text-[var(--shop-accent)]">
-                  {heroProduct.title}
-                </p>
-              </div>
-            </Link>
-          ) : (
-            <div className="flex min-h-64 flex-col justify-center text-center">
-              <p className="text-3xl font-semibold tracking-tight text-[var(--shop-primary)] sm:text-4xl">
-                A collection to explore.
-              </p>
-              <p className="mt-4 text-[var(--shop-text)]">
-                {isLoading ? 'Loading products...' : 'Take a look around the shop.'}
-              </p>
-            </div>
-          )}
-        </div>
+        <figure className="aspect-square min-w-0 overflow-hidden rounded-3xl bg-white md:aspect-[4/5]">
+          <img
+            src="/images/perfume-editorial.webp"
+            alt="Editorial photograph of an unbranded glass perfume bottle on sunlit sand"
+            width={1100}
+            height={1650}
+            fetchPriority="high"
+            className="h-full w-full object-cover object-[center_55%]"
+          />
+        </figure>
       </section>
 
       <section aria-labelledby="featured-heading">
@@ -105,12 +72,12 @@ function HomePage() {
               A first look at what is in the shop.
             </p>
           </div>
-          <Link
-            to="/catalogue"
+          <a
+            href="#catalogue"
             className="inline-flex min-h-11 items-center rounded-lg font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
           >
             View all products
-          </Link>
+          </a>
         </div>
 
         {isLoading ? (
@@ -168,6 +135,23 @@ function HomePage() {
           </div>
         </section>
       )}
+
+      <section id="catalogue" aria-labelledby="home-catalogue-heading" className="scroll-mt-8 border-t border-[var(--shop-primary)]/15 pt-12 sm:pt-16">
+        <h2 id="home-catalogue-heading" className="text-3xl font-semibold tracking-tight text-[var(--shop-text)] sm:text-4xl">
+          Catalogue
+        </h2>
+        {isLoading ? (
+          <p className="mt-8 text-[var(--shop-text)]" role="status">Loading products...</p>
+        ) : hasError ? (
+          <p className="mt-8 text-[var(--shop-accent)]" role="alert">
+            Unable to load products. Please try again later.
+          </p>
+        ) : products.length === 0 ? (
+          <p className="mt-8 text-[var(--shop-text)]">No products found.</p>
+        ) : (
+          <ProductGrid products={products} headingLevel="h3" />
+        )}
+      </section>
     </div>
   )
 }
