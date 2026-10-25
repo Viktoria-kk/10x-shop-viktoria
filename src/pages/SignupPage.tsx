@@ -103,9 +103,6 @@ function SignupPage() {
         Sign up
       </h1>
       <p className="mt-3 text-[var(--shop-text)]">Enter your details to continue shopping.</p>
-      <p className="mt-2 text-sm text-[var(--shop-text)]">
-        Demo sign up: no permanent account is created.
-      </p>
 
       <form className="mt-8 space-y-6 sm:mt-10" onSubmit={handleSubmit} noValidate>
         {signupFields.map((field) => {

@@ -1,6 +1,7 @@
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/cart-context'
+import HeaderSearch from './HeaderSearch'
 
 const navigationItems = [
   { label: 'Home', to: '/' },
@@ -9,7 +10,7 @@ const navigationItems = [
 ]
 
 const navigationItemClasses =
-  'inline-flex min-h-11 items-center rounded-md px-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]'
+  'inline-flex min-h-11 items-center rounded-md px-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] sm:px-3'
 
 function navigationLinkClasses(isActive: boolean) {
   return `${navigationItemClasses} ${
@@ -25,7 +26,7 @@ function Header() {
   const location = useLocation()
 
   return (
-    <header className="border-b border-[var(--shop-background)] bg-white">
+    <header className="relative border-b border-[var(--shop-background)] bg-white">
       <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6 lg:px-8">
         <Link
           to="/"
@@ -57,6 +58,7 @@ function Header() {
               )}
             </NavLink>
           ))}
+          <HeaderSearch key={location.pathname} />
           <NavLink
             to={isLoggedIn ? '/profile' : '/login'}
             state={!isLoggedIn && (location.pathname === '/login' || location.pathname === '/signup') ? location.state : undefined}

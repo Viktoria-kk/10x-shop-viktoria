@@ -61,9 +61,6 @@ function LoginPage() {
 
       <h1 className="mt-8 text-3xl font-semibold tracking-tight text-[var(--shop-text)] sm:text-4xl">Log in</h1>
       <p className="mt-3 text-[var(--shop-text)]">Enter your details to continue shopping.</p>
-      <p className="mt-2 text-sm text-[var(--shop-text)]">
-        Demo log in: no account is verified or saved.
-      </p>
 
       <form className="mt-8 space-y-6 sm:mt-10" onSubmit={handleSubmit} noValidate>
         <div>
