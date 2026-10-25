@@ -8,7 +8,7 @@ The project gave me a way to connect components and props with state, effects, C
 
 ## 2. Goals and Initial Plan
 
-In [PLAN.md](PLAN.md), I set out to complete the CORE storefront before considering optional features. The planned work covered project setup, routing and shared layout, local authentication, a catalogue and product details, cart state, checkout, styling, quality checks, documentation and deployment. Search, sorting, Orders and Profile were deferred because they were not needed for the main journey. I later chose to add homepage product search as a separate optional enhancement.
+In [PLAN.md](PLAN.md), I set out to complete the CORE storefront before considering optional features. The planned work covered project setup, routing and shared layout, local authentication, a catalogue and product details, cart state, checkout, styling, quality checks, documentation and deployment. Search, sorting, Orders and Profile were deferred because they were not needed for the main journey. I later chose to add homepage product search and a local Profile page as separate optional enhancements.
 
 The plan divided the work into small, reviewable stages. That order mattered: product types and request functions had to exist before the catalogue could display live data, and the cart had to be shared before Checkout could use its totals. The plan's hours were estimates, not a record of time actually spent. I have kept the historical plan as written rather than presenting its proposed schedule as completed dates.
 
@@ -25,6 +25,7 @@ The statuses below describe what the source and project records support. **Imple
 | Storefront Home and featured products | Enhancement | Implemented | `/` introduces the store, highlights selected DummyJSON products and shows the full Catalogue below; live layout awaits final QA. |
 | Login and AuthContext | CORE | Implemented | Controlled validation and local login state. |
 | Local Sign up demonstration | Optional | Implemented | Four-field form uses the existing AuthContext; live behaviour awaits final QA. |
+| Account navigation and Profile | Optional FULL | Implemented | One Header link follows local auth state; protected Profile shows available session data and a Log out action. Browser behaviour remains unverified. |
 | Protected Checkout | CORE | Implemented | Guests go to Login and can return to Checkout. |
 | DummyJSON catalogue request | CORE | Implemented | Requests 12 products with loading, error and empty branches. |
 | Homepage Catalogue search | Optional FULL | Implemented | Debounced DummyJSON search returns all matching products, with URL query, loading, error and empty states; browser behaviour remains unverified. |
@@ -42,7 +43,7 @@ The statuses below describe what the source and project records support. **Imple
 | Production build, README, PLAN and report | CORE | Implemented | Build passes; this report completes the documentation set. |
 | Vercel deployment | CORE | Partially implemented | Public site works according to my confirmation; detailed hosted checks remain open. |
 | Chrome, Firefox, keyboard and screen-reader checks | CORE quality | Not verified | No completed browser or assistive-technology results are recorded. |
-| Sorting, Orders and Profile | Optional FULL | Not implemented | Deferred outside CORE scope. |
+| Sorting and Orders | Optional FULL | Not implemented | Deferred outside CORE scope. |
 
 ## 4. Technologies and Architecture
 
@@ -50,11 +51,11 @@ React components divide the interface into pages and smaller pieces, with typed 
 
 TypeScript describes product responses, cart items, user state and checkout forms. Strict checking catches incompatible data use before a build. Small functions under `src/api/` use native `fetch` for the DummyJSON catalogue and product details; they check HTTP success and let pages show an error instead of crashing. The catalogue requests 12 products, while `/products/:id` loads a selected product.
 
-React Router handles Home at `/`, the separate Catalogue at `/catalogue`, `/login`, optional `/signup`, `/products/:id`, `/cart`, protected `/checkout` and unknown paths. Home fetches 12 products for its featured section and usual Catalogue grid; the separate `/catalogue` route keeps its own grid. The homepage search waits 400ms after input changes, then stores a trimmed term in `?q=` and requests all matches through DummyJSON's search endpoint with `limit=0`. An `AbortController` cancels superseded requests, and the existing `ProductGrid` and `ProductCard` display the results. The search handles loading, errors and no matches; clearing it returns to the usual grid. `AuthContext` holds a temporary user in memory for both Login and Sign up. `CartContext` owns item changes and calculates the badge count, subtotal and total from current items. It also reads and writes `shop_cart` in `localStorage`, checking saved values before using them. This keeps related shopping state in one place without a separate state library. Tailwind's responsive grid and flex utilities work alongside CSS variables for the shared colours.
+React Router handles Home at `/`, the separate Catalogue at `/catalogue`, `/login`, optional `/signup`, protected `/profile`, `/products/:id`, `/cart`, protected `/checkout` and unknown paths. Home fetches 12 products for its featured section and usual Catalogue grid; the separate `/catalogue` route keeps its own grid. The homepage search waits 400ms after input changes, then stores a trimmed term in `?q=` and requests all matches through DummyJSON's search endpoint with `limit=0`. An `AbortController` cancels superseded requests, and the existing `ProductGrid` and `ProductCard` display the results. The search handles loading, errors and no matches; clearing it returns to the usual grid. `AuthContext` holds a temporary user in memory for both Login and Sign up, including an email only when entered during Sign up. One Header Account link uses this state to open Login or Profile. The existing protected-route check sends guests to Login and carries either Checkout or Profile as the return destination. Log out clears the user without touching the cart. `CartContext` owns item changes and calculates the badge count, subtotal and total from current items. It also reads and writes `shop_cart` in `localStorage`, checking saved values before using them. This keeps related shopping state in one place without a separate state library. Tailwind's responsive grid and flex utilities work alongside CSS variables for the shared colours.
 
 ## 5. Visual Design Decisions
 
-I wanted product images and the shopping actions to remain the focus. My chosen direction is restrained and spacious, with typography and whitespace separating content instead of placing every element inside a heavy rectangular card. Home starts with a clear shopping action beside a licensed editorial perfume photograph, then leads into four featured products, a closer look at another item and the complete Catalogue. The photograph is not presented as a purchasable product. The Catalogue search sits directly above the existing product grid, with a softly rounded input, visible focus styling and a clear action. Softly rounded surfaces appear where they help group content. The same visual hierarchy carries through Home, the catalogue, details, cart and forms.
+I wanted product images and the shopping actions to remain the focus. My chosen direction is restrained and spacious, with typography and whitespace separating content instead of placing every element inside a heavy rectangular card. Home starts with a clear shopping action beside a licensed editorial perfume photograph, then leads into four featured products, a closer look at another item and the complete Catalogue. The photograph is not presented as a purchasable product. The Catalogue search sits directly above the existing product grid, with a softly rounded input, visible focus styling and a clear action. Profile gives the current username prominence with a simple monogram and plain session information instead of invented account features. Softly rounded surfaces appear where they help group content. The same visual hierarchy carries through Home, the catalogue, details, cart and forms.
 
 The palette uses charcoal `#2C2C2C` for readable text, muted berry `#853953` and deep plum `#612D53` for emphasis, and soft neutral `#F3F4F4` for the base. Shared CSS variables keep those choices consistent. Responsive grid and flex layouts let content rearrange for narrower screens; the exact appearance and overflow at 375px still require a recorded browser check. I have not treated source-level styling review as a usability study.
 
@@ -72,7 +73,7 @@ Second, Product Details had an `<h1>` in its success view but not in its early l
 
 ## 8. Testing and Quality
 
-`npm run typecheck`, `npm run lint` and `npm run build` pass after adding homepage search. The [CORE test checklist](docs/CORE_TEST_CHECKLIST.md) records focused mocked harness passes for API responses, remaining-stock controls, cart operations and saved-data handling, local login and route protection, and Checkout validation and confirmation. Those checks are useful evidence for particular behaviours, but they are not a browser test of the full journey, the new Home route or search, the Sign up flow or the submission guard. The source also includes loading and error messages, guarded storage access and an Error Boundary.
+`npm run typecheck`, `npm run lint` and `npm run build` pass after adding Account navigation and Profile. The [CORE test checklist](docs/CORE_TEST_CHECKLIST.md) records focused mocked harness passes for API responses, remaining-stock controls, cart operations and saved-data handling, local login and route protection, and Checkout validation and confirmation. Those checks are useful evidence for particular behaviours, but they are not a browser test of the full journey, the new Home route or search, the Sign up and Profile flows, or the submission guard. The source also includes loading and error messages, guarded storage access and an Error Boundary.
 
 The [compatibility review](COMPATIBILITY.md) leaves Chrome, Firefox and mobile-sized browser scenarios **NOT TESTED**. Keyboard and screen-reader use, a complete shopping journey, direct-route refreshes and 375px overflow are also unverified in the recorded checklist. The [performance notes](docs/PERFORMANCE_NOTES.md) contain build observations but no measured runtime improvement or Lighthouse audit. This distinction matters because a passing static check cannot prove that the interface behaves correctly in every browser.
 
@@ -88,23 +89,23 @@ These values come from the current checks and Git history. Bundle sizes are Vite
 
 | Metric | Value | Notes |
 | --- | --- | --- |
-| TypeScript check | Pass | `npm run typecheck` after homepage search. |
-| ESLint | Pass | `npm run lint` after homepage search. |
-| Production build | Pass | `npm run build` after homepage search. |
-| Main JavaScript bundle | 305.24 kB; 91.79 kB gzip | Current Vite build output. |
-| Main CSS bundle | 22.49 kB; 4.88 kB gzip | Current Vite build output. |
+| TypeScript check | Pass | `npm run typecheck` after Account and Profile. |
+| ESLint | Pass | `npm run lint` after Account and Profile. |
+| Production build | Pass | `npm run build` after Account and Profile. |
+| Main JavaScript bundle | 307.73 kB; 92.21 kB gzip | Current Vite build output. |
+| Main CSS bundle | 23.76 kB; 5.01 kB gzip | Current Vite build output. |
 | Lighthouse Performance | Not measured | No saved audit. |
 | Lighthouse Accessibility | Not measured | No saved audit. |
 | Lighthouse Best Practices | Not measured | No saved audit. |
 | Lighthouse CLS | Not measured | No saved audit. |
-| Total Git commits | 38 | `main`, including homepage product search. |
+| Total Git commits | 39 | `main`, including Account navigation and Profile. |
 | Pull requests | Not verified | No repository count established. |
 | Closed issues | Not verified | No repository count established. |
 | Time per workstream | Not tracked | PLAN estimates are not actual time records. |
 
 ## 11. Limitations
 
-Authentication is simulated in React state and resets after refresh. The optional Sign up form does not create a permanent registration or user database. Cart contents persist only in the current browser and origin through `localStorage`; a local order confirmation does not create a server order or charge a payment. Catalogue, search and details pages depend on DummyJSON and network access. Homepage search is an optional enhancement; filtering, sorting, pagination, Orders and Profile remain outside the implemented CORE scope.
+Authentication is simulated in React state and resets after refresh. Profile displays only the current username and, when available from Sign up, the email held in memory. The optional Sign up form does not create a permanent registration or user database. Cart contents persist only in the current browser and origin through `localStorage`; a local order confirmation does not create a server order or charge a payment. Catalogue, search and details pages depend on DummyJSON and network access. Homepage search and local Profile are optional enhancements; filtering, sorting, pagination and Orders remain outside the implemented CORE scope.
 
 The application has responsive rules and accessible markup choices, but recorded manual browser, assistive-technology and Lighthouse results are still missing. These are limits on what I can claim about verification, not evidence that those scenarios fail.
 

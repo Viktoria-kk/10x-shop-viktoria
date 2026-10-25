@@ -28,6 +28,14 @@ function SignupPage() {
   const { isLoggedIn, login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const navigationState: unknown = location.state
+  const destination =
+    navigationState !== null &&
+    typeof navigationState === 'object' &&
+    'from' in navigationState &&
+    (navigationState.from === '/checkout' || navigationState.from === '/profile')
+      ? navigationState.from
+      : '/profile'
 
   function updateField(field: keyof SignupFormValues, value: string) {
     setValues((current) => ({ ...current, [field]: value }))
@@ -72,16 +80,7 @@ function SignupPage() {
     setErrors(nextErrors)
     if (Object.values(nextErrors).some(Boolean)) return
 
-    login(username)
-
-    const navigationState: unknown = location.state
-    const destination =
-      navigationState !== null &&
-      typeof navigationState === 'object' &&
-      'from' in navigationState &&
-      navigationState.from === '/checkout'
-        ? '/checkout'
-        : '/catalogue'
+    login(username, email)
 
     navigate(destination, { replace: true })
   }
@@ -89,7 +88,7 @@ function SignupPage() {
   const inputClasses =
     'mt-2 block min-h-12 w-full rounded-xl border bg-white px-4 text-[var(--shop-text)] outline-none transition-colors focus-visible:border-[var(--shop-accent)] focus-visible:ring-2 focus-visible:ring-[var(--shop-accent)]'
 
-  if (isLoggedIn) return <Navigate to="/catalogue" replace />
+  if (isLoggedIn) return <Navigate to={destination} replace />
 
   return (
     <section className="mx-auto w-full max-w-md">

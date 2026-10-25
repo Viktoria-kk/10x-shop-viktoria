@@ -40,9 +40,9 @@ function LoginPage() {
       navigationState !== null &&
       typeof navigationState === 'object' &&
       'from' in navigationState &&
-      navigationState.from === '/checkout'
-        ? '/checkout'
-        : '/catalogue'
+      (navigationState.from === '/checkout' || navigationState.from === '/profile')
+        ? navigationState.from
+        : '/profile'
 
     navigate(destination, { replace: true })
   }
@@ -120,13 +120,13 @@ function LoginPage() {
         </button>
       </form>
       <p className="mt-6 text-center text-sm text-[var(--shop-text)]">
-        Don't have an account?{' '}
+        New here?{' '}
         <Link
           to="/signup"
           state={location.state}
           className="inline-flex min-h-11 items-center rounded-lg font-semibold text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
         >
-          Sign up
+          Create an account
         </Link>
       </p>
     </section>

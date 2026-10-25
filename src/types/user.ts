@@ -12,4 +12,5 @@ export interface SignupFormValues {
 
 export interface AuthUser {
   username: string
+  email?: string
 }

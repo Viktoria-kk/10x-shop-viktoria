@@ -12,8 +12,9 @@ I use this project to demonstrate routing, reusable components, shared state, co
 - A homepage Catalogue that requests 12 products by default and searches the complete matching DummyJSON result set. Its controlled input waits 400ms after typing, keeps the query in the URL and handles loading, error and empty results.
 - Product Details with images, thumbnail selection, stock-aware quantity controls and Add to cart.
 - A shared cart with quantity changes, Remove and Clear cart actions, discounted totals and a Header item count. Cart items are saved in browser `localStorage`.
-- A local Login form with validation, plus a protected Checkout route that sends guests to Login and returns them to Checkout afterwards.
-- An optional local Sign up demonstration with four validated fields. It uses the same temporary login state and can return guests to Checkout.
+- One Account link in the Header: guests reach Login, while signed-in visitors reach a protected Profile page.
+- Local Login and Sign up forms link to each other. Direct sign-in opens Profile; guests who attempted Checkout return there after either form.
+- A Profile page shows the current username and an email only when it came from Sign up, with shopping, cart and Log out actions.
 - A controlled Checkout form with inline validation and an order summary. A valid submission prevents repeat orders, shows a local confirmation and clears the cart; it does not process a payment.
 - Not Found handling for unknown routes or invalid products, and an application Error Boundary with a Reload fallback for unexpected render errors.
 
@@ -25,7 +26,7 @@ I use this project to demonstrate routing, reusable components, shared state, co
 | TypeScript | Types for product data, cart items, forms and component contracts. |
 | Vite | Development tooling and the production build. |
 | Tailwind CSS v4 | Responsive layouts and interface styling. |
-| React Router | Page routes, product URLs and the protected Checkout route. |
+| React Router | Page routes, product URLs and protected Checkout and Profile routes. |
 | DummyJSON REST API and native `fetch` | Catalogue and Product Details data. |
 | Browser `localStorage` | Cart persistence across refreshes in the same browser and origin. |
 | ESLint | Static checks for code quality and React hooks. |
@@ -37,7 +38,7 @@ src/
   api/          Product request functions
   components/   Shared layout, product, cart and Error Boundary components
   context/      Cart and local authentication providers
-  pages/        Home, Catalogue, Product Details, Login, Sign up, Cart and Checkout pages
+  pages/        Home, Catalogue, Product Details, Login, Sign up, Profile, Cart and Checkout pages
   routes/       Route definitions and protected-route check
   types/        Product, cart, user and checkout types
   utils/        Price calculation and formatting helpers
@@ -49,7 +50,7 @@ The API functions fetch product data for the pages. Pages pass products to reusa
 
 ## How It Works
 
-The main route is **Home → Catalogue → Product Details → Add to cart → Cart → Login or Sign up if needed → Checkout → Order confirmation**. Home at `/` introduces the shop with selected API-backed products and the full Catalogue below; its Shop now link jumps to that section. The separate product grid also remains at `/catalogue`. On Home, I can type in the Catalogue search field to request matching products from DummyJSON after a short pause. The URL stores the term as `?q=`, so I can share or revisit a search; clearing it restores the usual Catalogue. Product requests go to DummyJSON. The cart lives in React Context and is also saved under `shop_cart` in `localStorage`. Login and Sign up only change local React state; neither verifies credentials against a server nor creates a permanent account. Checkout reads the cart totals, validates the form, shows a confirmation and clears the cart without sending an order to a server.
+The main route is **Home → Catalogue → Product Details → Add to cart → Cart → Login or Sign up if needed → Checkout → Order confirmation**. Home at `/` introduces the shop with selected API-backed products and the full Catalogue below; its Shop now link jumps to that section. The separate product grid also remains at `/catalogue`. On Home, I can type in the Catalogue search field to request matching products from DummyJSON after a short pause. The URL stores the term as `?q=`, so I can share or revisit a search; clearing it restores the usual Catalogue. Product requests go to DummyJSON. The cart lives in React Context and is also saved under `shop_cart` in `localStorage`. The Header's Account link opens Login for guests and Profile for signed-in visitors. Login and Sign up link to each other while carrying an attempted Checkout destination through router state. Profile shows only information held in the current session and Log out leaves the cart alone. Neither form verifies credentials against a server or creates a permanent account. Checkout reads the cart totals, validates the form, shows a confirmation and clears the cart without sending an order to a server.
 
 ## Getting Started
 
@@ -74,7 +75,7 @@ Open the local URL printed by Vite. Product data needs an internet connection to
 
 ## Demo Login
 
-The Login form accepts any non-empty username and a password of at least six characters. For example, `emilys` and `emilyspass` are valid form inputs, **not registered credentials**. Login is held only in React state, so a refresh resets it; the saved cart can still remain in `localStorage`.
+The Login form accepts any non-empty username and a password of at least six characters. For example, `emilys` and `emilyspass` are valid form inputs, **not registered credentials**. Direct Login or Sign up opens Profile; an attempted Checkout still takes priority. The current username, and email entered during Sign up, stay in React memory only. Refreshing or logging out clears the session; the saved cart can still remain in `localStorage`.
 
 ## Live Demo
 
@@ -95,7 +96,7 @@ I wanted the interface to feel restrained and spacious, with clear typography an
 - Login and Sign up are simulated locally; Sign up creates no permanent account or user database. Refreshing resets login state.
 - Cart data is stored in the current browser and origin, while orders are only local confirmations. No payment is processed.
 - Product loading depends on DummyJSON being available.
-- Homepage product search is an optional enhancement. Category and price filtering, sorting, pagination, Orders and Profile remain outside the current implementation.
+- Homepage product search and the local Profile page are optional enhancements. Category and price filtering, sorting, pagination and Orders remain outside the current implementation.
 - Browser, responsive and accessibility checks, plus deployed-route refresh checks, still need manual verification.
 
 ## Credits

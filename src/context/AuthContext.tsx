@@ -4,7 +4,7 @@ import type { AuthUser } from '../types/user'
 interface AuthContextValue {
   user: AuthUser | null
   isLoggedIn: boolean
-  login: (username: string) => void
+  login: (username: string, email?: string) => void
   logout: () => void
 }
 
@@ -13,8 +13,8 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null)
 
-  function login(username: string) {
-    setUser({ username })
+  function login(username: string, email?: string) {
+    setUser(email ? { username, email } : { username })
   }
 
   function logout() {
