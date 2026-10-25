@@ -74,7 +74,7 @@ function CheckoutPage() {
 
   if (completedOrder !== null) {
     return (
-      <section className="mx-auto max-w-2xl">
+      <section className="mx-auto max-w-2xl break-words text-center">
         <h1 className="text-3xl font-semibold tracking-tight text-[var(--shop-text)] md:text-4xl">
           Thank you! Your order has been placed.
         </h1>
@@ -103,7 +103,7 @@ function CheckoutPage() {
       <h1 className="text-3xl font-semibold tracking-tight text-[var(--shop-text)] md:text-4xl">
         Checkout
       </h1>
-      <div className="mt-10 grid gap-12 lg:grid-cols-3 lg:gap-14">
+      <div className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-3 lg:gap-12">
         <form className="min-w-0 space-y-6 lg:col-span-2" onSubmit={handleSubmit} noValidate>
           {checkoutFields.map((field) => {
             const error = errors[field.name]
@@ -142,7 +142,7 @@ function CheckoutPage() {
           </button>
         </form>
 
-        <section aria-labelledby="order-summary-heading" className="min-w-0 self-start rounded-3xl bg-white p-6 sm:p-8">
+        <section aria-labelledby="order-summary-heading" className="min-w-0 self-start rounded-3xl bg-white p-5 sm:p-8">
           <h2 id="order-summary-heading" className="text-xl font-semibold text-[var(--shop-text)]">
             Order summary
           </h2>

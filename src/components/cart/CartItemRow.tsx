@@ -16,13 +16,13 @@ function CartItemRow({ item, onQuantityChange, onRemove }: CartItemRowProps) {
     Number.isInteger(item.quantity) && item.quantity >= 1 && item.quantity + 1 <= item.stock
 
   return (
-    <li className="flex min-w-0 gap-4 sm:gap-6">
+    <li className="flex min-w-0 gap-3 py-6 first:pt-0 sm:gap-6 sm:py-8">
       <img
         src={item.thumbnail}
         alt={`Thumbnail of ${item.title}`}
         width={112}
         height={112}
-        className="h-24 w-24 shrink-0 rounded-2xl bg-white object-contain p-2 sm:h-28 sm:w-28"
+        className="h-20 w-20 shrink-0 rounded-2xl bg-white object-contain p-2 sm:h-28 sm:w-28"
       />
       <div className="min-w-0 flex-1">
         <Link

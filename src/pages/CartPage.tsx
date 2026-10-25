@@ -12,9 +12,9 @@ function CartPage() {
 
   return (
     <section>
-      <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Your cart</h1>
+      <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">Your cart</h1>
       {items.length === 0 ? (
-        <div className="mt-10">
+        <div className="mt-8 max-w-prose sm:mt-10">
           <p className="text-lg text-[var(--shop-text)]">Your cart is empty.</p>
           <Link
             to="/"
@@ -24,9 +24,9 @@ function CartPage() {
           </Link>
         </div>
       ) : (
-        <div className="mt-10 grid gap-12 lg:grid-cols-3 lg:gap-14">
+        <div className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-3 lg:gap-12">
           <div className="min-w-0 lg:col-span-2">
-            <ul className="space-y-10">
+            <ul className="divide-y divide-[var(--shop-primary)]/15">
               {items.map((item) => (
                 <CartItemRow
                   key={item.productId}
@@ -39,13 +39,13 @@ function CartPage() {
             <button
               type="button"
               onClick={handleClearCart}
-              className="mt-10 min-h-11 rounded-lg px-1 font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
+              className="mt-6 min-h-11 rounded-lg px-1 font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
             >
               Clear cart
             </button>
           </div>
 
-          <section aria-labelledby="order-summary-heading" className="min-w-0 self-start rounded-3xl bg-white p-6 sm:p-8">
+          <section aria-labelledby="order-summary-heading" className="min-w-0 self-start rounded-3xl bg-white p-5 sm:p-8">
             <h2 id="order-summary-heading" className="text-xl font-semibold text-[var(--shop-text)]">
               Order summary
             </h2>

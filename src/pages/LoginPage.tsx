@@ -59,10 +59,10 @@ function LoginPage() {
         ← Back to catalogue
       </Link>
 
-      <h1 className="mt-8 text-4xl font-semibold tracking-tight text-[var(--shop-text)]">Log in</h1>
+      <h1 className="mt-8 text-3xl font-semibold tracking-tight text-[var(--shop-text)] sm:text-4xl">Log in</h1>
       <p className="mt-3 text-[var(--shop-text)]">Enter your details to continue shopping.</p>
 
-      <form className="mt-10 space-y-6" onSubmit={handleSubmit} noValidate>
+      <form className="mt-8 space-y-6 sm:mt-10" onSubmit={handleSubmit} noValidate>
         <div>
           <label htmlFor="username" className="block text-sm font-medium text-[var(--shop-text)]">
             Username

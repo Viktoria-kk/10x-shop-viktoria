@@ -88,9 +88,9 @@ function ProductDetails({ productId }: { productId: number }) {
         ← Back to catalogue
       </Link>
 
-      <div className="mt-8 grid gap-10 md:grid-cols-2 md:items-start lg:gap-16">
+      <div className="mt-8 grid gap-8 md:grid-cols-2 md:items-start lg:gap-12">
         <div className="min-w-0">
-          <div className="aspect-square rounded-3xl bg-white p-6 sm:p-10">
+          <div className="aspect-square rounded-3xl bg-white p-4 sm:p-8 lg:p-10">
             <img
               src={images[selectedImageIndex]}
               alt={`${product.title}, image ${selectedImageIndex + 1} of ${images.length}`}
@@ -99,7 +99,7 @@ function ProductDetails({ productId }: { productId: number }) {
               className="h-full w-full object-contain"
             />
           </div>
-          <div className="mt-4 flex flex-wrap gap-3" role="group" aria-label="Product images">
+          <div className="mt-4 flex flex-wrap gap-2 sm:gap-3" role="group" aria-label="Product images">
             {images.map((image, index) => (
               <button
                 key={`${image}-${index}`}
@@ -122,7 +122,7 @@ function ProductDetails({ productId }: { productId: number }) {
           <h1 className="mt-3 break-words text-3xl font-semibold tracking-tight text-[var(--shop-text)] md:text-4xl">
             {product.title}
           </h1>
-          {product.brand && <p className="mt-3 text-[var(--shop-text)]">By {product.brand}</p>}
+          {product.brand && <p className="mt-3 break-words text-[var(--shop-text)]">By {product.brand}</p>}
           <p className="mt-4 text-sm text-[var(--shop-text)]">Rated {product.rating.toFixed(1)} out of 5</p>
 
           <div className="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-2">
@@ -186,14 +186,14 @@ function ProductDetails({ productId }: { productId: number }) {
             type="button"
             onClick={handleAddToCart}
             disabled={isOutOfStock || isAtLimit}
-            className="mt-6 inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--shop-primary)] px-6 font-medium text-white hover:bg-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[var(--shop-primary)] px-6 font-medium text-white hover:bg-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             {isOutOfStock ? 'Out of stock' : isAtLimit ? 'Maximum in cart' : 'Add to cart'}
           </button>
           {feedback && <p role="status" className="mt-2 text-sm text-[var(--shop-accent)]">{feedback}</p>}
 
           <h2 className="mt-10 text-lg font-semibold text-[var(--shop-text)]">About this product</h2>
-          <p className="mt-3 max-w-prose leading-7 text-[var(--shop-text)]">{product.description}</p>
+          <p className="mt-3 max-w-prose break-words leading-7 text-[var(--shop-text)]">{product.description}</p>
         </div>
       </div>
     </section>

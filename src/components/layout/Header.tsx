@@ -30,7 +30,7 @@ function Header() {
 
   return (
     <header className="border-b border-[var(--shop-background)] bg-white">
-      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-8">
+      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6 lg:px-8">
         <Link
           to="/"
           className="inline-flex min-h-11 items-center self-start rounded-md text-lg font-semibold tracking-tight text-[var(--shop-primary)] hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"

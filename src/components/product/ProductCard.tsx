@@ -36,7 +36,7 @@ function ProductCard({ product }: ProductCardProps) {
             loading="lazy"
             width={320}
             height={320}
-            className="h-full w-full object-contain p-6"
+            className="h-full w-full object-contain p-4 sm:p-5 lg:p-6"
           />
         </div>
         <p className="mt-4 text-sm text-[var(--shop-text)]">
