@@ -85,6 +85,7 @@ function ProductDetails({ productId }: { productId: number }) {
     }
 
     addItem(displayedProduct, quantity)
+    setQuantity(Math.min(quantity, remainingStock - quantity))
     setFeedback('Added to cart')
   }
 
@@ -179,16 +180,16 @@ function ProductDetails({ productId }: { productId: number }) {
                 −
               </button>
               <span className="min-w-5 text-center font-medium text-[var(--shop-text)]" aria-live="polite">
-                {product.stock === 0 ? 'Unavailable' : quantity}
+                {remainingStock === 0 ? 'Unavailable' : quantity}
               </span>
               <button
                 type="button"
                 aria-label={`Increase quantity of ${product.title}`}
                 onClick={() => {
-                  setQuantity((current) => Math.min(product.stock, current + 1))
+                  setQuantity((current) => Math.min(remainingStock, current + 1))
                   setFeedback('')
                 }}
-                disabled={quantity >= product.stock}
+                disabled={quantity >= remainingStock}
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-xl text-[var(--shop-text)] shadow-sm hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 +
