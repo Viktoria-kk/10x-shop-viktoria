@@ -6,9 +6,10 @@ import { discountedPrice, formatPrice } from '../../utils/format'
 
 interface ProductCardProps {
   product: Product
+  headingLevel?: 'h2' | 'h3'
 }
 
-function ProductCard({ product }: ProductCardProps) {
+function ProductCard({ product, headingLevel: Heading = 'h2' }: ProductCardProps) {
   const { items, addItem } = useCart()
   const [feedback, setFeedback] = useState('')
   const hasDiscount = product.discountPercentage >= 1
@@ -30,23 +31,31 @@ function ProductCard({ product }: ProductCardProps) {
         to={`/products/${product.id}`}
         className="group block rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--shop-accent)]"
       >
-        <div className="aspect-square overflow-hidden rounded-2xl bg-white">
-          <img
-            src={product.thumbnail}
-            alt={product.title}
-            loading="lazy"
-            width={320}
-            height={320}
-            className="h-full w-full object-contain p-4 sm:p-5 lg:p-6"
-          />
+        <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-white">
+          <span aria-hidden="true" className="p-6 text-center text-sm text-[var(--shop-text)]">
+            {product.title}
+          </span>
+          {product.thumbnail?.trim() && (
+            <img
+              src={product.thumbnail}
+              alt={product.title}
+              loading="lazy"
+              width={320}
+              height={320}
+              onError={(event) => {
+                event.currentTarget.style.display = 'none'
+              }}
+              className="absolute inset-0 h-full w-full bg-white object-contain p-4 sm:p-5 lg:p-6"
+            />
+          )}
         </div>
         <p className="mt-4 text-sm text-[var(--shop-text)]">
           {product.category}
           {product.brand && <span> · {product.brand}</span>}
         </p>
-        <h2 className="mt-1 break-words text-lg font-semibold leading-snug text-[var(--shop-text)] group-hover:text-[var(--shop-accent)]">
+        <Heading className="mt-1 break-words text-lg font-semibold leading-snug text-[var(--shop-text)] group-hover:text-[var(--shop-accent)]">
           {product.title}
-        </h2>
+        </Heading>
       </Link>
 
       <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">

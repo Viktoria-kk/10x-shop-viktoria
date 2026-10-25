@@ -3,6 +3,7 @@ import Layout from '../components/layout/Layout'
 import CartPage from '../pages/CartPage'
 import CataloguePage from '../pages/CataloguePage'
 import CheckoutPage from '../pages/CheckoutPage'
+import HomePage from '../pages/HomePage'
 import LoginPage from '../pages/LoginPage'
 import NotFoundPage from '../pages/NotFoundPage'
 import ProductPage from '../pages/ProductPage'
@@ -13,7 +14,8 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<CataloguePage />} />
+        <Route index element={<HomePage />} />
+        <Route path="catalogue" element={<CataloguePage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="signup" element={<SignupPage />} />
         <Route path="products/:id" element={<ProductPage />} />

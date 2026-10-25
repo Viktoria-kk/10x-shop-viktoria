@@ -8,6 +8,7 @@ I use this project to demonstrate routing, reusable components, shared state, co
 
 ## Features
 
+- A storefront homepage with an editorial hero and featured products loaded from DummyJSON.
 - A Catalogue that requests 12 DummyJSON products, with a responsive grid, product cards and loading, error and empty states.
 - Product Details with images, thumbnail selection, stock-aware quantity controls and Add to cart.
 - A shared cart with quantity changes, Remove and Clear cart actions, discounted totals and a Header item count. Cart items are saved in browser `localStorage`.
@@ -36,7 +37,7 @@ src/
   api/          Product request functions
   components/   Shared layout, product, cart and Error Boundary components
   context/      Cart and local authentication providers
-  pages/        Catalogue, Product Details, Login, Sign up, Cart and Checkout pages
+  pages/        Home, Catalogue, Product Details, Login, Sign up, Cart and Checkout pages
   routes/       Route definitions and protected-route check
   types/        Product, cart, user and checkout types
   utils/        Price calculation and formatting helpers
@@ -48,7 +49,7 @@ The API functions fetch product data for the pages. Pages pass products to reusa
 
 ## How It Works
 
-The main route is **Catalogue → Product Details → Add to cart → Cart → Login or Sign up if needed → Checkout → Order confirmation**. Product requests go to DummyJSON. The cart lives in React Context and is also saved under `shop_cart` in `localStorage`. Login and Sign up only change local React state; neither verifies credentials against a server nor creates a permanent account. Checkout reads the cart totals, validates the form, shows a confirmation and clears the cart without sending an order to a server.
+The main route is **Home → Catalogue → Product Details → Add to cart → Cart → Login or Sign up if needed → Checkout → Order confirmation**. Home at `/` introduces the shop with selected API-backed products; `/catalogue` contains the complete product grid. Product requests go to DummyJSON. The cart lives in React Context and is also saved under `shop_cart` in `localStorage`. Login and Sign up only change local React state; neither verifies credentials against a server nor creates a permanent account. Checkout reads the cart totals, validates the form, shows a confirmation and clears the cart without sending an order to a server.
 
 ## Getting Started
 

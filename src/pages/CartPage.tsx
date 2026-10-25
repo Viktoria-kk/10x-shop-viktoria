@@ -17,7 +17,7 @@ function CartPage() {
         <div className="mt-8 max-w-prose sm:mt-10">
           <p role="status" className="text-lg text-[var(--shop-text)]">Your cart is empty.</p>
           <Link
-            to="/"
+            to="/catalogue"
             className="mt-4 inline-flex min-h-11 items-center rounded-lg font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
           >
             Browse products

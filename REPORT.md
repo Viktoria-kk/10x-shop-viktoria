@@ -22,6 +22,7 @@ The statuses below describe what the source and project records support. **Imple
 | Tailwind CSS v4; shared palette | CORE | Implemented | Vite plugin, utilities and CSS variables are present. |
 | Reusable components and shared layout | CORE | Implemented | Header, Footer, product and cart components are separated. |
 | React Router navigation and Not Found handling | CORE | Implemented | Required paths and unknown-path fallback are declared. |
+| Storefront Home and featured products | Enhancement | Implemented | `/` introduces the store with selected DummyJSON products; live layout awaits final QA. |
 | Login and AuthContext | CORE | Implemented | Controlled validation and local login state. |
 | Local Sign up demonstration | Optional | Implemented | Four-field form uses the existing AuthContext; live behaviour awaits final QA. |
 | Protected Checkout | CORE | Implemented | Guests go to Login and can return to Checkout. |
@@ -48,11 +49,11 @@ React components divide the interface into pages and smaller pieces, with typed 
 
 TypeScript describes product responses, cart items, user state and checkout forms. Strict checking catches incompatible data use before a build. Small functions under `src/api/` use native `fetch` for the DummyJSON catalogue and product details; they check HTTP success and let pages show an error instead of crashing. The catalogue requests 12 products, while `/products/:id` loads a selected product.
 
-React Router handles `/`, `/login`, optional `/signup`, `/products/:id`, `/cart`, protected `/checkout` and unknown paths. `AuthContext` holds a temporary user in memory for both Login and Sign up. `CartContext` owns item changes and calculates the badge count, subtotal and total from current items. It also reads and writes `shop_cart` in `localStorage`, checking saved values before using them. This keeps related shopping state in one place without a separate state library. Tailwind's responsive grid and flex utilities work alongside CSS variables for the shared colours.
+React Router handles Home at `/`, the complete Catalogue at `/catalogue`, `/login`, optional `/signup`, `/products/:id`, `/cart`, protected `/checkout` and unknown paths. Home fetches selected products for discovery, while Catalogue keeps its full 12-product grid. `AuthContext` holds a temporary user in memory for both Login and Sign up. `CartContext` owns item changes and calculates the badge count, subtotal and total from current items. It also reads and writes `shop_cart` in `localStorage`, checking saved values before using them. This keeps related shopping state in one place without a separate state library. Tailwind's responsive grid and flex utilities work alongside CSS variables for the shared colours.
 
 ## 5. Visual Design Decisions
 
-I wanted product images and the shopping actions to remain the focus. My chosen direction is restrained and spacious, with typography and whitespace separating content instead of placing every element inside a heavy rectangular card. Softly rounded surfaces appear where they help group content. The same visual hierarchy carries through the catalogue, details, cart and forms.
+I wanted product images and the shopping actions to remain the focus. My chosen direction is restrained and spacious, with typography and whitespace separating content instead of placing every element inside a heavy rectangular card. Home starts with a clear shopping action and a real product image, then leads into four featured products and a closer look at another item. Softly rounded surfaces appear where they help group content. The same visual hierarchy carries through Home, the catalogue, details, cart and forms.
 
 The palette uses charcoal `#2C2C2C` for readable text, muted berry `#853953` and deep plum `#612D53` for emphasis, and soft neutral `#F3F4F4` for the base. Shared CSS variables keep those choices consistent. Responsive grid and flex layouts let content rearrange for narrower screens; the exact appearance and overflow at 375px still require a recorded browser check. I have not treated source-level styling review as a usability study.
 
@@ -70,7 +71,7 @@ Second, Product Details had an `<h1>` in its success view but not in its early l
 
 ## 8. Testing and Quality
 
-`npm run typecheck`, `npm run lint` and `npm run build` pass after the authentication and Checkout refinement. The [CORE test checklist](docs/CORE_TEST_CHECKLIST.md) records focused mocked harness passes for API responses, remaining-stock controls, cart operations and saved-data handling, local login and route protection, and Checkout validation and confirmation. Those checks are useful evidence for particular behaviours, but they are not a browser test of the full journey, the Sign up flow or this submission guard. The source also includes loading and error messages, guarded storage access and an Error Boundary.
+`npm run typecheck`, `npm run lint` and `npm run build` pass after the homepage addition. The [CORE test checklist](docs/CORE_TEST_CHECKLIST.md) records focused mocked harness passes for API responses, remaining-stock controls, cart operations and saved-data handling, local login and route protection, and Checkout validation and confirmation. Those checks are useful evidence for particular behaviours, but they are not a browser test of the full journey, the new Home route, the Sign up flow or the submission guard. The source also includes loading and error messages, guarded storage access and an Error Boundary.
 
 The [compatibility review](COMPATIBILITY.md) leaves Chrome, Firefox and mobile-sized browser scenarios **NOT TESTED**. Keyboard and screen-reader use, a complete shopping journey, direct-route refreshes and 375px overflow are also unverified in the recorded checklist. The [performance notes](docs/PERFORMANCE_NOTES.md) contain build observations but no measured runtime improvement or Lighthouse audit. This distinction matters because a passing static check cannot prove that the interface behaves correctly in every browser.
 
@@ -86,16 +87,16 @@ These values come from the current checks and Git history. Bundle sizes are Vite
 
 | Metric | Value | Notes |
 | --- | --- | --- |
-| TypeScript check | Pass | `npm run typecheck` after the authentication and Checkout refinement. |
-| ESLint | Pass | `npm run lint` after the authentication and Checkout refinement. |
-| Production build | Pass | `npm run build` after the authentication and Checkout refinement. |
-| Main JavaScript bundle | 294.34 kB; 89.43 kB gzip | Current Vite build output. |
-| Main CSS bundle | 18.25 kB; 4.28 kB gzip | Current Vite build output. |
+| TypeScript check | Pass | `npm run typecheck` after the homepage addition. |
+| ESLint | Pass | `npm run lint` after the homepage addition. |
+| Production build | Pass | `npm run build` after the homepage addition. |
+| Main JavaScript bundle | 300.39 kB; 90.37 kB gzip | Current Vite build output. |
+| Main CSS bundle | 20.87 kB; 4.69 kB gzip | Current Vite build output. |
 | Lighthouse Performance | Not measured | No saved audit. |
 | Lighthouse Accessibility | Not measured | No saved audit. |
 | Lighthouse Best Practices | Not measured | No saved audit. |
 | Lighthouse CLS | Not measured | No saved audit. |
-| Total Git commits | 35 | `main`, including the authentication and Checkout refinement. |
+| Total Git commits | 36 | `main`, including the storefront homepage. |
 | Pull requests | Not verified | No repository count established. |
 | Closed issues | Not verified | No repository count established. |
 | Time per workstream | Not tracked | PLAN estimates are not actual time records. |

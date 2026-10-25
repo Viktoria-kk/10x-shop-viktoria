@@ -100,7 +100,7 @@ function CheckoutPage() {
           <span className="font-semibold">{formatPrice(completedOrder.total)}</span>
         </p>
         <Link
-          to="/"
+          to="/catalogue"
           className="mt-8 inline-flex min-h-11 items-center rounded-lg font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
         >
           Continue shopping

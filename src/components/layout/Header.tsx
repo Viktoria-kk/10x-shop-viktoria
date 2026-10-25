@@ -3,7 +3,8 @@ import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/cart-context'
 
 const navigationItems = [
-  { label: 'Catalogue', to: '/' },
+  { label: 'Home', to: '/' },
+  { label: 'Catalogue', to: '/catalogue' },
   { label: 'Cart', to: '/cart' },
 ]
 

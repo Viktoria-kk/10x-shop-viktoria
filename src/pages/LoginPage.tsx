@@ -42,7 +42,7 @@ function LoginPage() {
       'from' in navigationState &&
       navigationState.from === '/checkout'
         ? '/checkout'
-        : '/'
+        : '/catalogue'
 
     navigate(destination, { replace: true })
   }
@@ -53,7 +53,7 @@ function LoginPage() {
   return (
     <section className="mx-auto w-full max-w-md">
       <Link
-        to="/"
+        to="/catalogue"
         className="inline-flex min-h-11 items-center rounded-lg text-sm font-medium text-[var(--shop-accent)] hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
       >
         ← Back to catalogue

@@ -81,7 +81,7 @@ function SignupPage() {
       'from' in navigationState &&
       navigationState.from === '/checkout'
         ? '/checkout'
-        : '/'
+        : '/catalogue'
 
     navigate(destination, { replace: true })
   }
@@ -89,12 +89,12 @@ function SignupPage() {
   const inputClasses =
     'mt-2 block min-h-12 w-full rounded-xl border bg-white px-4 text-[var(--shop-text)] outline-none transition-colors focus-visible:border-[var(--shop-accent)] focus-visible:ring-2 focus-visible:ring-[var(--shop-accent)]'
 
-  if (isLoggedIn) return <Navigate to="/" replace />
+  if (isLoggedIn) return <Navigate to="/catalogue" replace />
 
   return (
     <section className="mx-auto w-full max-w-md">
       <Link
-        to="/"
+        to="/catalogue"
         className="inline-flex min-h-11 items-center rounded-lg text-sm font-medium text-[var(--shop-accent)] hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
       >
         ← Back to catalogue
