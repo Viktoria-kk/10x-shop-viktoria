@@ -116,6 +116,16 @@ function LoginPage() {
           Log In
         </button>
       </form>
+      <p className="mt-6 text-center text-sm text-[var(--shop-text)]">
+        Don't have an account?{' '}
+        <Link
+          to="/signup"
+          state={location.state}
+          className="inline-flex min-h-11 items-center rounded-lg font-semibold text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
+        >
+          Sign up
+        </Link>
+      </p>
     </section>
   )
 }

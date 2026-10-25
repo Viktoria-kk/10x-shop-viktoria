@@ -1,4 +1,4 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/cart-context'
 
@@ -22,6 +22,7 @@ function Header() {
   const { isLoggedIn, logout } = useAuth()
   const { itemCount } = useCart()
   const navigate = useNavigate()
+  const location = useLocation()
 
   function handleLogout() {
     logout()
@@ -70,12 +71,22 @@ function Header() {
               Log out
             </button>
           ) : (
-            <NavLink
-              to="/login"
-              className={({ isActive }) => navigationLinkClasses(isActive)}
-            >
-              Log in
-            </NavLink>
+            <>
+              <NavLink
+                to="/login"
+                state={location.pathname === '/signup' ? location.state : undefined}
+                className={({ isActive }) => navigationLinkClasses(isActive)}
+              >
+                Log in
+              </NavLink>
+              <NavLink
+                to="/signup"
+                state={location.pathname === '/login' ? location.state : undefined}
+                className={({ isActive }) => navigationLinkClasses(isActive)}
+              >
+                Sign up
+              </NavLink>
+            </>
           )}
         </nav>
       </div>

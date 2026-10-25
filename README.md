@@ -12,6 +12,7 @@ I use this project to demonstrate routing, reusable components, shared state, co
 - Product Details with images, thumbnail selection, stock-aware quantity controls and Add to cart.
 - A shared cart with quantity changes, Remove and Clear cart actions, discounted totals and a Header item count. Cart items are saved in browser `localStorage`.
 - A local Login form with validation, plus a protected Checkout route that sends guests to Login and returns them to Checkout afterwards.
+- An optional local Sign up demonstration with four validated fields. It uses the same temporary login state and can return guests to Checkout.
 - A controlled Checkout form with inline validation and an order summary. A valid submission shows a local confirmation and clears the cart; it does not process a payment.
 - Not Found handling for unknown routes or invalid products, and an application Error Boundary with a Reload fallback for unexpected render errors.
 
@@ -35,7 +36,7 @@ src/
   api/          Product request functions
   components/   Shared layout, product, cart and Error Boundary components
   context/      Cart and local authentication providers
-  pages/        Catalogue, Product Details, Login, Cart and Checkout pages
+  pages/        Catalogue, Product Details, Login, Sign up, Cart and Checkout pages
   routes/       Route definitions and protected-route check
   types/        Product, cart, user and checkout types
   utils/        Price calculation and formatting helpers
@@ -47,7 +48,7 @@ The API functions fetch product data for the pages. Pages pass products to reusa
 
 ## How It Works
 
-The main route is **Catalogue → Product Details → Add to cart → Cart → Login if needed → Checkout → Order confirmation**. Product requests go to DummyJSON. The cart lives in React Context and is also saved under `shop_cart` in `localStorage`. Login only changes local React state; it does not check real credentials. Checkout reads the cart totals, validates the form, shows a confirmation and clears the cart without sending an order to a server.
+The main route is **Catalogue → Product Details → Add to cart → Cart → Login or Sign up if needed → Checkout → Order confirmation**. Product requests go to DummyJSON. The cart lives in React Context and is also saved under `shop_cart` in `localStorage`. Login and Sign up only change local React state; neither verifies credentials against a server nor creates a permanent account. Checkout reads the cart totals, validates the form, shows a confirmation and clears the cart without sending an order to a server.
 
 ## Getting Started
 
@@ -90,7 +91,7 @@ I wanted the interface to feel restrained and spacious, with clear typography an
 
 ## Current Limitations
 
-- Login is simulated locally; there is no registration or user database. Refreshing resets login state.
+- Login and Sign up are simulated locally; Sign up creates no permanent account or user database. Refreshing resets login state.
 - Cart data is stored in the current browser and origin, while orders are only local confirmations. No payment is processed.
 - Product loading depends on DummyJSON being available.
 - Search, filtering, sorting, pagination, Orders and Profile are outside the current CORE implementation.

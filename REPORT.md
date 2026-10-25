@@ -23,6 +23,7 @@ The statuses below describe what the source and project records support. **Imple
 | Reusable components and shared layout | CORE | Implemented | Header, Footer, product and cart components are separated. |
 | React Router navigation and Not Found handling | CORE | Implemented | Required paths and unknown-path fallback are declared. |
 | Login and AuthContext | CORE | Implemented | Controlled validation and local login state. |
+| Local Sign up demonstration | Optional | Implemented | Four-field form uses the existing AuthContext; live behaviour awaits final QA. |
 | Protected Checkout | CORE | Implemented | Guests go to Login and can return to Checkout. |
 | DummyJSON catalogue request | CORE | Implemented | Requests 12 products with loading, error and empty branches. |
 | Catalogue cards and grid | CORE | Implemented | Reusable components use fetched product data. |
@@ -47,7 +48,7 @@ React components divide the interface into pages and smaller pieces, with typed 
 
 TypeScript describes product responses, cart items, user state and checkout forms. Strict checking catches incompatible data use before a build. Small functions under `src/api/` use native `fetch` for the DummyJSON catalogue and product details; they check HTTP success and let pages show an error instead of crashing. The catalogue requests 12 products, while `/products/:id` loads a selected product.
 
-React Router handles `/`, `/login`, `/products/:id`, `/cart`, protected `/checkout` and unknown paths. `AuthContext` holds a temporary user in memory. `CartContext` owns item changes and calculates the badge count, subtotal and total from current items. It also reads and writes `shop_cart` in `localStorage`, checking saved values before using them. This keeps related shopping state in one place without a separate state library. Tailwind's responsive grid and flex utilities work alongside CSS variables for the shared colours.
+React Router handles `/`, `/login`, optional `/signup`, `/products/:id`, `/cart`, protected `/checkout` and unknown paths. `AuthContext` holds a temporary user in memory for both Login and Sign up. `CartContext` owns item changes and calculates the badge count, subtotal and total from current items. It also reads and writes `shop_cart` in `localStorage`, checking saved values before using them. This keeps related shopping state in one place without a separate state library. Tailwind's responsive grid and flex utilities work alongside CSS variables for the shared colours.
 
 ## 5. Visual Design Decisions
 
@@ -69,7 +70,7 @@ Second, Product Details had an `<h1>` in its success view but not in its early l
 
 ## 8. Testing and Quality
 
-`npm run typecheck`, `npm run lint` and `npm run build` pass for the final documentation change. The [CORE test checklist](docs/CORE_TEST_CHECKLIST.md) records focused mocked harness passes for API responses, remaining-stock controls, cart operations and saved-data handling, local login and route protection, and Checkout validation and confirmation. Those checks are useful evidence for particular behaviours, but they are not a browser test of the full journey. The source also includes loading and error messages, guarded storage access and an Error Boundary.
+`npm run typecheck`, `npm run lint` and `npm run build` pass after the optional Sign up addition. The [CORE test checklist](docs/CORE_TEST_CHECKLIST.md) records focused mocked harness passes for API responses, remaining-stock controls, cart operations and saved-data handling, local login and route protection, and Checkout validation and confirmation. Those checks are useful evidence for particular behaviours, but they are not a browser test of the full journey or the new Sign up flow. The source also includes loading and error messages, guarded storage access and an Error Boundary.
 
 The [compatibility review](COMPATIBILITY.md) leaves Chrome, Firefox and mobile-sized browser scenarios **NOT TESTED**. Keyboard and screen-reader use, a complete shopping journey, direct-route refreshes and 375px overflow are also unverified in the recorded checklist. The [performance notes](docs/PERFORMANCE_NOTES.md) contain build observations but no measured runtime improvement or Lighthouse audit. This distinction matters because a passing static check cannot prove that the interface behaves correctly in every browser.
 
@@ -85,23 +86,23 @@ These values come from the current checks and Git history. Bundle sizes are Vite
 
 | Metric | Value | Notes |
 | --- | --- | --- |
-| TypeScript check | Pass | `npm run typecheck` in this report change. |
-| ESLint | Pass | `npm run lint` in this report change. |
-| Production build | Pass | `npm run build` in this report change. |
-| Main JavaScript bundle | 289.45 kB; 88.77 kB gzip | Current Vite build output. |
+| TypeScript check | Pass | `npm run typecheck` after Sign up. |
+| ESLint | Pass | `npm run lint` after Sign up. |
+| Production build | Pass | `npm run build` after Sign up. |
+| Main JavaScript bundle | 293.87 kB; 89.35 kB gzip | Current Vite build output after Sign up. |
 | Main CSS bundle | 18.33 kB; 4.29 kB gzip | Current Vite build output. |
 | Lighthouse Performance | Not measured | No saved audit. |
 | Lighthouse Accessibility | Not measured | No saved audit. |
 | Lighthouse Best Practices | Not measured | No saved audit. |
 | Lighthouse CLS | Not measured | No saved audit. |
-| Total Git commits | 32 | `main`, including this report commit. |
+| Total Git commits | 34 | `main`, including the later Sign up commit. |
 | Pull requests | Not verified | No repository count established. |
 | Closed issues | Not verified | No repository count established. |
 | Time per workstream | Not tracked | PLAN estimates are not actual time records. |
 
 ## 11. Limitations
 
-Authentication is simulated in React state and resets after refresh. There is no registration or user database. Cart contents persist only in the current browser and origin through `localStorage`; a local order confirmation does not create a server order or charge a payment. Catalogue and details pages depend on DummyJSON and network access. Search, filtering, sorting, pagination, Orders and Profile remain outside the implemented CORE scope.
+Authentication is simulated in React state and resets after refresh. The optional Sign up form does not create a permanent registration or user database. Cart contents persist only in the current browser and origin through `localStorage`; a local order confirmation does not create a server order or charge a payment. Catalogue and details pages depend on DummyJSON and network access. Search, filtering, sorting, pagination, Orders and Profile remain outside the implemented CORE scope.
 
 The application has responsive rules and accessible markup choices, but recorded manual browser, assistive-technology and Lighthouse results are still missing. These are limits on what I can claim about verification, not evidence that those scenarios fail.
 

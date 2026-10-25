@@ -6,6 +6,7 @@ import CheckoutPage from '../pages/CheckoutPage'
 import LoginPage from '../pages/LoginPage'
 import NotFoundPage from '../pages/NotFoundPage'
 import ProductPage from '../pages/ProductPage'
+import SignupPage from '../pages/SignupPage'
 import ProtectedRoute from './ProtectedRoute'
 
 function AppRoutes() {
@@ -14,6 +15,7 @@ function AppRoutes() {
       <Route path="/" element={<Layout />}>
         <Route index element={<CataloguePage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="signup" element={<SignupPage />} />
         <Route path="products/:id" element={<ProductPage />} />
         <Route path="cart" element={<CartPage />} />
         <Route element={<ProtectedRoute />}>
