@@ -1,5 +1,6 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { useCart } from '../../context/cart-context'
 
 const navigationItems = [
   { label: 'Catalogue', to: '/' },
@@ -19,6 +20,7 @@ function navigationLinkClasses(isActive: boolean) {
 
 function Header() {
   const { isLoggedIn, logout } = useAuth()
+  const { itemCount } = useCart()
   const navigate = useNavigate()
 
   function handleLogout() {
@@ -41,9 +43,22 @@ function Header() {
               key={to}
               to={to}
               end={to === '/'}
+              aria-label={
+                to === '/cart' && itemCount > 0
+                  ? `Cart, ${itemCount} ${itemCount === 1 ? 'item' : 'items'}`
+                  : undefined
+              }
               className={({ isActive }) => navigationLinkClasses(isActive)}
             >
               {label}
+              {to === '/cart' && itemCount > 0 && (
+                <span
+                  aria-hidden="true"
+                  className="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[var(--shop-accent)] px-1 text-xs font-semibold leading-none text-white no-underline"
+                >
+                  {itemCount}
+                </span>
+              )}
             </NavLink>
           ))}
           {isLoggedIn ? (
