@@ -27,14 +27,14 @@ function Header() {
 
   return (
     <header className="relative border-b border-[var(--shop-background)] bg-white">
-      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:px-8">
         <Link
           to="/"
           className="inline-flex min-h-11 items-center self-start rounded-md text-lg font-semibold tracking-tight text-[var(--shop-primary)] hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
         >
           10X Shop
         </Link>
-        <nav aria-label="Main navigation" className="flex flex-wrap items-center gap-1">
+        <nav aria-label="Main navigation" className="flex w-full min-w-0 flex-wrap items-center gap-1 lg:w-auto lg:flex-1 lg:justify-end">
           {navigationItems.map(({ label, to }) => (
             <NavLink
               key={to}

@@ -29,6 +29,7 @@ function HeaderSearch() {
   const navigate = useNavigate()
   const toggleRef = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const restoreFocusRef = useRef(false)
   const [isOpen, setIsOpen] = useState(false)
   const [draft, setDraft] = useState<{ key: string; value: string } | null>(null)
   const urlQuery = (new URLSearchParams(location.search).get('q') ?? '').trim()
@@ -36,6 +37,10 @@ function HeaderSearch() {
 
   useEffect(() => {
     if (isOpen) inputRef.current?.focus()
+    else if (restoreFocusRef.current) {
+      toggleRef.current?.focus()
+      restoreFocusRef.current = false
+    }
   }, [isOpen])
 
   useEffect(() => {
@@ -51,9 +56,9 @@ function HeaderSearch() {
   }, [isOpen, draft, location, navigate, urlQuery])
 
   function closeSearch() {
+    restoreFocusRef.current = true
     setIsOpen(false)
     setDraft(null)
-    toggleRef.current?.focus()
   }
 
   function submitSearch(event: FormEvent<HTMLFormElement>) {
@@ -76,28 +81,29 @@ function HeaderSearch() {
   }
 
   return (
-    <>
+    <div
+      className={`flex h-11 max-w-full shrink-0 items-center overflow-hidden rounded-xl transition-[width,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${isOpen ? 'w-64 bg-[var(--shop-background)] focus-within:ring-2 focus-within:ring-[var(--shop-accent)] lg:w-72' : 'w-[6.5rem]'}`}
+    >
       <button
         ref={toggleRef}
         type="button"
-        onClick={() => isOpen ? closeSearch() : setIsOpen(true)}
+        onClick={() => setIsOpen(true)}
         aria-expanded={isOpen}
         aria-controls={isOpen ? 'header-search-panel' : undefined}
-        className="inline-flex min-h-11 items-center gap-2 rounded-md px-2 text-sm font-medium text-[var(--shop-text)] hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] sm:px-3"
+        className={`${isOpen ? 'hidden' : 'inline-flex'} h-11 w-full items-center gap-2 rounded-md px-2 text-sm font-medium text-[var(--shop-text)] hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)] sm:px-3`}
       >
         <SearchIcon /> Search
       </button>
-
       {isOpen && (
         <form
           id="header-search-panel"
           role="search"
           onSubmit={submitSearch}
           onKeyDown={(event) => { if (event.key === 'Escape') { event.preventDefault(); closeSearch() } }}
-          className="absolute inset-x-4 top-full z-30 mt-2 flex min-w-0 items-center gap-1 rounded-2xl bg-white p-2 shadow-[0_8px_24px_rgba(44,44,44,0.12)] focus-within:ring-2 focus-within:ring-[var(--shop-accent)] sm:inset-x-auto sm:right-6 sm:w-96 lg:right-8"
+          className="flex h-full w-full min-w-0 items-center gap-1 px-1"
         >
+          <button type="submit" aria-label="Search products" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[var(--shop-accent)] hover:bg-[var(--shop-primary)]/10 focus-visible:outline-2 focus-visible:outline-[var(--shop-accent)]"><SearchIcon /></button>
           <label htmlFor="header-search" className="sr-only">Search products</label>
-          <span className="pl-2 text-[var(--shop-accent)]"><SearchIcon /></span>
           <input
             ref={inputRef}
             id="header-search"
@@ -107,12 +113,11 @@ function HeaderSearch() {
             placeholder="Search products..."
             className="min-w-0 flex-1 appearance-none bg-transparent px-1 py-2 text-sm text-[var(--shop-text)] outline-none placeholder:text-[var(--shop-text)]/60 [&::-webkit-search-cancel-button]:hidden"
           />
-          {input && <button type="button" onClick={clearSearch} aria-label="Clear search" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-[var(--shop-accent)] hover:bg-[var(--shop-primary)]/10 focus-visible:outline-2 focus-visible:outline-[var(--shop-accent)]"><CloseIcon /></button>}
-          <button type="submit" aria-label="Search products" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-[var(--shop-accent)] hover:bg-[var(--shop-primary)]/10 focus-visible:outline-2 focus-visible:outline-[var(--shop-accent)]"><SearchIcon /></button>
-          <button type="button" onClick={closeSearch} aria-label="Close search" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-[var(--shop-text)] hover:bg-[var(--shop-primary)]/10 focus-visible:outline-2 focus-visible:outline-[var(--shop-accent)]"><CloseIcon /></button>
+          {input && <button type="button" onClick={clearSearch} aria-label="Clear search" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[var(--shop-accent)] hover:bg-[var(--shop-primary)]/10 focus-visible:outline-2 focus-visible:outline-[var(--shop-accent)]"><CloseIcon /></button>}
+          <button type="button" onClick={closeSearch} aria-label="Close search" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[var(--shop-text)] hover:bg-[var(--shop-primary)]/10 focus-visible:outline-2 focus-visible:outline-[var(--shop-accent)]"><CloseIcon /></button>
         </form>
       )}
-    </>
+    </div>
   )
 }
 

@@ -56,7 +56,7 @@ React Router handles Home at `/`, the separate Catalogue at `/catalogue`, `/logi
 
 ## 5. Visual Design Decisions
 
-I wanted product images and the shopping actions to remain the focus. My chosen direction is restrained and spacious, with typography and whitespace separating content instead of placing every element inside a heavy rectangular card. Home starts with a clear shopping action beside a licensed editorial perfume photograph, then leads into four featured products, a closer look at Dior J'adore from the product API and the complete Catalogue. The hero photograph is not presented as a purchasable product. The Catalogue search sits above the product grid, with compact pagination below it. The Header Search begins as one icon-and-label control and opens a field beneath the navigation on narrow or wide screens. Profile keeps the username prominent, then shows personal information or a simple editing form. Softly rounded surfaces appear where they help group content. The same visual hierarchy carries through Home, the catalogue, details, cart and forms.
+I wanted product images and the shopping actions to remain the focus. My chosen direction is restrained and spacious, with typography and whitespace separating content instead of placing every element inside a heavy rectangular card. Home starts with a clear shopping action beside a licensed editorial perfume photograph, then leads into four featured products, a closer look at Dior J'adore from the product API and the complete Catalogue. The hero photograph is not presented as a purchasable product. The Catalogue search sits above the product grid, with compact pagination below it. The Header Search begins as one icon-and-label control and expands into a field within the navigation; the navigation can wrap on narrow screens. Profile keeps the username prominent, then shows personal information or a simple editing form. Softly rounded surfaces appear where they help group content. The same visual hierarchy carries through Home, the catalogue, details, cart and forms.
 
 The palette uses charcoal `#2C2C2C` for readable text, muted berry `#853953` and deep plum `#612D53` for emphasis, and soft neutral `#F3F4F4` for the base. Shared CSS variables keep those choices consistent. Responsive grid and flex layouts let content rearrange for narrower screens; the exact appearance and overflow at 375px still require a recorded browser check. I have not treated source-level styling review as a usability study.
 
@@ -95,13 +95,13 @@ These values come from the current checks and Git history. Bundle sizes are Vite
 | TypeScript check | Pass | `npm run typecheck` after these changes. |
 | ESLint | Pass | `npm run lint` after these changes. |
 | Production build | Pass | `npm run build` after these changes. |
-| Main JavaScript bundle | 318.10 kB; 94.38 kB gzip | Current Vite build output. |
-| Main CSS bundle | 25.56 kB; 5.25 kB gzip | Current Vite build output. |
+| Main JavaScript bundle | 318.23 kB; 94.45 kB gzip | Current Vite build output. |
+| Main CSS bundle | 26.07 kB; 5.35 kB gzip | Current Vite build output. |
 | Lighthouse Performance | Not measured | No saved audit. |
 | Lighthouse Accessibility | Not measured | No saved audit. |
 | Lighthouse Best Practices | Not measured | No saved audit. |
 | Lighthouse CLS | Not measured | No saved audit. |
-| Total Git commits | 41 | `main`, including Profile editing, pagination and expandable Header Search. |
+| Total Git commits | 42 | `main`, including the inline Header Search refinement. |
 | Pull requests | Not verified | No repository count established. |
 | Closed issues | Not verified | No repository count established. |
 | Time per workstream | Not tracked | PLAN estimates are not actual time records. |
