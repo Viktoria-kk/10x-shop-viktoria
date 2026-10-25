@@ -13,4 +13,14 @@ export interface SignupFormValues {
 export interface AuthUser {
   username: string
   email?: string
+  firstName?: string
+  lastName?: string
+  phone?: string
+}
+
+export interface ProfileDetails {
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
 }

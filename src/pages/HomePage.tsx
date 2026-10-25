@@ -3,12 +3,12 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { fetchProducts } from '../api/products.api'
 import HomeCatalogue from '../components/product/HomeCatalogue'
 import ProductGrid from '../components/product/ProductGrid'
-import type { Product } from '../types/product'
+import type { ProductsResponse } from '../types/product'
 
 function HomePage() {
   const [searchParams] = useSearchParams()
   const query = (searchParams.get('q') ?? '').trim()
-  const [products, setProducts] = useState<Product[]>([])
+  const [cataloguePageOne, setCataloguePageOne] = useState<ProductsResponse | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
 
@@ -18,8 +18,8 @@ function HomePage() {
 
     async function loadProducts() {
       try {
-        const data = await fetchProducts(controller.signal)
-        if (isCurrent) setProducts(data.products)
+        const data = await fetchProducts(0, controller.signal)
+        if (isCurrent) setCataloguePageOne(data)
       } catch {
         if (isCurrent) setHasError(true)
       } finally {
@@ -35,6 +35,7 @@ function HomePage() {
     }
   }, [])
 
+  const products = cataloguePageOne?.products ?? []
   const editorialProduct = products.find((product) => product.id === 8)
 
   return (
@@ -141,7 +142,7 @@ function HomePage() {
         </section>
       )}
 
-      <HomeCatalogue query={query} products={products} isLoading={isLoading} hasError={hasError} />
+      <HomeCatalogue query={query} pageOne={cataloguePageOne} isLoading={isLoading} hasError={hasError} />
     </div>
   )
 }

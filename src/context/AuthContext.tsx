@@ -1,10 +1,11 @@
 import { createContext, useContext, useState, type ReactNode } from 'react'
-import type { AuthUser } from '../types/user'
+import type { AuthUser, ProfileDetails } from '../types/user'
 
 interface AuthContextValue {
   user: AuthUser | null
   isLoggedIn: boolean
   login: (username: string, email?: string) => void
+  updateProfile: (details: ProfileDetails) => void
   logout: () => void
 }
 
@@ -21,8 +22,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null)
   }
 
+  function updateProfile(details: ProfileDetails) {
+    setUser((current) => current ? { ...current, ...details } : null)
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn: user !== null, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoggedIn: user !== null, login, updateProfile, logout }}>
       {children}
     </AuthContext.Provider>
   )

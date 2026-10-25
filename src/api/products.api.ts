@@ -1,7 +1,7 @@
 import type { Product, ProductsResponse } from '../types/product'
 
-export async function fetchProducts(signal?: AbortSignal): Promise<ProductsResponse> {
-  const response = await fetch('https://dummyjson.com/products?limit=12&skip=0', { signal })
+export async function fetchProducts(skip = 0, signal?: AbortSignal): Promise<ProductsResponse> {
+  const response = await fetch(`https://dummyjson.com/products?limit=12&skip=${skip}`, { signal })
 
   if (!response.ok) {
     throw new Error('Failed to fetch products')
