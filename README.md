@@ -9,7 +9,7 @@ I use this project to demonstrate routing, reusable components, shared state, co
 ## Features
 
 - A storefront homepage with an editorial perfume photograph, featured DummyJSON products and the complete Catalogue below the landing sections.
-- A Catalogue that requests 12 DummyJSON products, with a responsive grid, product cards and loading, error and empty states.
+- A homepage Catalogue that requests 12 products by default and searches the complete matching DummyJSON result set. Its controlled input waits 400ms after typing, keeps the query in the URL and handles loading, error and empty results.
 - Product Details with images, thumbnail selection, stock-aware quantity controls and Add to cart.
 - A shared cart with quantity changes, Remove and Clear cart actions, discounted totals and a Header item count. Cart items are saved in browser `localStorage`.
 - A local Login form with validation, plus a protected Checkout route that sends guests to Login and returns them to Checkout afterwards.
@@ -49,7 +49,7 @@ The API functions fetch product data for the pages. Pages pass products to reusa
 
 ## How It Works
 
-The main route is **Home → Catalogue → Product Details → Add to cart → Cart → Login or Sign up if needed → Checkout → Order confirmation**. Home at `/` introduces the shop with selected API-backed products and the full Catalogue below; its Shop now link jumps to that section. The complete product grid also remains at `/catalogue`. Product requests go to DummyJSON. The cart lives in React Context and is also saved under `shop_cart` in `localStorage`. Login and Sign up only change local React state; neither verifies credentials against a server nor creates a permanent account. Checkout reads the cart totals, validates the form, shows a confirmation and clears the cart without sending an order to a server.
+The main route is **Home → Catalogue → Product Details → Add to cart → Cart → Login or Sign up if needed → Checkout → Order confirmation**. Home at `/` introduces the shop with selected API-backed products and the full Catalogue below; its Shop now link jumps to that section. The separate product grid also remains at `/catalogue`. On Home, I can type in the Catalogue search field to request matching products from DummyJSON after a short pause. The URL stores the term as `?q=`, so I can share or revisit a search; clearing it restores the usual Catalogue. Product requests go to DummyJSON. The cart lives in React Context and is also saved under `shop_cart` in `localStorage`. Login and Sign up only change local React state; neither verifies credentials against a server nor creates a permanent account. Checkout reads the cart totals, validates the form, shows a confirmation and clears the cart without sending an order to a server.
 
 ## Getting Started
 
@@ -95,7 +95,7 @@ I wanted the interface to feel restrained and spacious, with clear typography an
 - Login and Sign up are simulated locally; Sign up creates no permanent account or user database. Refreshing resets login state.
 - Cart data is stored in the current browser and origin, while orders are only local confirmations. No payment is processed.
 - Product loading depends on DummyJSON being available.
-- Search, filtering, sorting, pagination, Orders and Profile are outside the current CORE implementation.
+- Homepage product search is an optional enhancement. Category and price filtering, sorting, pagination, Orders and Profile remain outside the current implementation.
 - Browser, responsive and accessibility checks, plus deployed-route refresh checks, still need manual verification.
 
 ## Credits

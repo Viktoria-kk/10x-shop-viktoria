@@ -1,10 +1,26 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { fetchProducts } from '../api/products.api'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { fetchProducts, searchProducts } from '../api/products.api'
 import ProductGrid from '../components/product/ProductGrid'
-import type { Product } from '../types/product'
+import type { Product, ProductsResponse } from '../types/product'
+
+type SearchResult = {
+  query: string
+  attempt: number
+  response: ProductsResponse | null
+  hasError: boolean
+}
 
 function HomePage() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const urlQuery = (searchParams.get('q') ?? '').trim()
+  const [draft, setDraft] = useState<{ locationKey: string; value: string } | null>(null)
+  const searchInput = draft?.locationKey === location.key ? draft.value : urlQuery
+  const searchQuery = searchInput.trim()
+  const [searchAttempt, setSearchAttempt] = useState(0)
+  const [searchResult, setSearchResult] = useState<SearchResult | null>(null)
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
@@ -30,7 +46,73 @@ function HomePage() {
     }
   }, [])
 
+  useEffect(() => {
+    if (draft?.locationKey !== location.key) return
+
+    const nextQuery = draft.value.trim()
+    if (nextQuery === urlQuery) return
+
+    const timeout = window.setTimeout(() => {
+      const nextParams = new URLSearchParams(location.search)
+      if (nextQuery) nextParams.set('q', nextQuery)
+      else nextParams.delete('q')
+
+      setDraft(null)
+      void navigate(
+        {
+          pathname: location.pathname,
+          search: nextParams.toString() ? `?${nextParams.toString()}` : '',
+          hash: location.hash,
+        },
+        { preventScrollReset: true },
+      )
+    }, 400)
+
+    return () => window.clearTimeout(timeout)
+  }, [draft, location, navigate, urlQuery])
+
+  useEffect(() => {
+    if (!urlQuery) return
+
+    const controller = new AbortController()
+
+    async function loadSearchResults() {
+      try {
+        const response = await searchProducts(urlQuery, controller.signal)
+        if (!controller.signal.aborted) {
+          setSearchResult({ query: urlQuery, attempt: searchAttempt, response, hasError: false })
+        }
+      } catch {
+        if (!controller.signal.aborted) {
+          setSearchResult({ query: urlQuery, attempt: searchAttempt, response: null, hasError: true })
+        }
+      }
+    }
+
+    void loadSearchResults()
+    return () => controller.abort()
+  }, [urlQuery, searchAttempt])
+
+  function clearSearch() {
+    setDraft(null)
+    if (!searchParams.has('q')) return
+
+    const nextParams = new URLSearchParams(location.search)
+    nextParams.delete('q')
+    void navigate(
+      {
+        pathname: location.pathname,
+        search: nextParams.toString() ? `?${nextParams.toString()}` : '',
+        hash: location.hash,
+      },
+      { preventScrollReset: true },
+    )
+  }
+
   const editorialProduct = products[4]
+  const currentSearchResult = searchResult?.query === urlQuery && searchResult.attempt === searchAttempt
+    ? searchResult
+    : null
 
   return (
     <div className="space-y-20 sm:space-y-28 lg:space-y-36">
@@ -138,9 +220,75 @@ function HomePage() {
 
       <section id="catalogue" aria-labelledby="home-catalogue-heading" className="scroll-mt-8 border-t border-[var(--shop-primary)]/15 pt-12 sm:pt-16">
         <h2 id="home-catalogue-heading" className="text-3xl font-semibold tracking-tight text-[var(--shop-text)] sm:text-4xl">
-          Catalogue
+          Explore the Catalogue
         </h2>
-        {isLoading ? (
+        <div className="mt-7 max-w-2xl">
+          <label htmlFor="product-search" className="sr-only">Search products</label>
+          <div className="flex min-w-0 items-center rounded-2xl border border-[var(--shop-primary)]/25 bg-white px-4 transition-colors focus-within:border-[var(--shop-primary)] focus-within:ring-2 focus-within:ring-[var(--shop-primary)]/20">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5 shrink-0 text-[var(--shop-accent)]">
+              <circle cx="10.8" cy="10.8" r="6.8" />
+              <path d="m16 16 5 5" strokeLinecap="round" />
+            </svg>
+            <input
+              id="product-search"
+              type="search"
+              value={searchInput}
+              onChange={(event) => setDraft({ locationKey: location.key, value: event.target.value })}
+              onKeyDown={(event) => {
+                if (event.key === 'Escape' && searchInput) clearSearch()
+              }}
+              placeholder="Search for products..."
+              className="min-w-0 flex-1 appearance-none bg-transparent py-3.5 pl-3 text-[var(--shop-text)] outline-none placeholder:text-[var(--shop-text)]/55 [&::-webkit-search-cancel-button]:hidden"
+            />
+            {searchInput && (
+              <button
+                type="button"
+                onClick={clearSearch}
+                aria-label="Clear search"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[var(--shop-accent)] transition-colors hover:bg-[var(--shop-primary)]/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5">
+                  <path d="M5 5 19 19M19 5 5 19" strokeLinecap="round" />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+        {searchQuery && (searchQuery !== urlQuery || !currentSearchResult) ? (
+          <p className="mt-8 text-[var(--shop-text)]" role="status">Searching products...</p>
+        ) : searchQuery && currentSearchResult?.hasError ? (
+          <div className="mt-8" role="alert">
+            <p className="text-[var(--shop-accent)]">Unable to search products. Please try again.</p>
+            <button
+              type="button"
+              onClick={() => setSearchAttempt((attempt) => attempt + 1)}
+              className="mt-3 min-h-11 font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
+            >
+              Retry search
+            </button>
+          </div>
+        ) : searchQuery && currentSearchResult?.response ? (
+          <>
+            <p className="mt-8 break-words text-[var(--shop-text)]" role="status" aria-live="polite">
+              {currentSearchResult.response.total} {currentSearchResult.response.total === 1 ? 'product' : 'products'} found for “{urlQuery}”
+            </p>
+            {currentSearchResult.response.products.length === 0 ? (
+              <div className="mt-8 max-w-xl">
+                <h3 className="text-xl font-semibold text-[var(--shop-text)]">No products found</h3>
+                <p className="mt-2 break-words leading-7 text-[var(--shop-text)]">We couldn’t find anything matching “{urlQuery}”. Try another search.</p>
+                <button
+                  type="button"
+                  onClick={clearSearch}
+                  className="mt-4 min-h-11 font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
+                >
+                  Clear search
+                </button>
+              </div>
+            ) : (
+              <ProductGrid products={currentSearchResult.response.products} headingLevel="h3" />
+            )}
+          </>
+        ) : isLoading ? (
           <p className="mt-8 text-[var(--shop-text)]" role="status">Loading products...</p>
         ) : hasError ? (
           <p className="mt-8 text-[var(--shop-accent)]" role="alert">

@@ -10,6 +10,19 @@ export async function fetchProducts(): Promise<ProductsResponse> {
   return (await response.json()) as ProductsResponse
 }
 
+export async function searchProducts(query: string, signal: AbortSignal): Promise<ProductsResponse> {
+  const response = await fetch(
+    `https://dummyjson.com/products/search?q=${encodeURIComponent(query)}&limit=0`,
+    { signal },
+  )
+
+  if (!response.ok) {
+    throw new Error('Failed to search products')
+  }
+
+  return (await response.json()) as ProductsResponse
+}
+
 export async function fetchProductById(id: number): Promise<Product | null> {
   const response = await fetch(`https://dummyjson.com/products/${id}`)
 
