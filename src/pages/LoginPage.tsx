@@ -2,12 +2,14 @@ import { useState, type FormEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import type { LoginFormValues } from '../types/user'
+import { isValidPassword, PASSWORD_HINT } from '../utils/password'
 
 type LoginErrors = Partial<Record<keyof LoginFormValues, string>>
 
 function LoginPage() {
   const [values, setValues] = useState<LoginFormValues>({ username: '', password: '' })
   const [errors, setErrors] = useState<LoginErrors>({})
+  const [passwordInteracted, setPasswordInteracted] = useState(false)
   const { login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
@@ -26,8 +28,8 @@ function LoginPage() {
     if (!username) nextErrors.username = 'Username is required'
     if (!values.password) {
       nextErrors.password = 'Password is required'
-    } else if (values.password.length < 6) {
-      nextErrors.password = 'Password must be at least 6 characters'
+    } else if (!isValidPassword(values.password)) {
+      nextErrors.password = PASSWORD_HINT
     }
 
     setErrors(nextErrors)
@@ -50,6 +52,10 @@ function LoginPage() {
 
   const inputClasses =
     'mt-2 block min-h-12 w-full rounded-xl border bg-white px-4 text-[var(--shop-text)] outline-none transition-colors focus-visible:border-[var(--shop-accent)] focus-visible:ring-2 focus-visible:ring-[var(--shop-accent)]'
+  const passwordMessage = errors.password === 'Password is required'
+    ? errors.password
+    : (passwordInteracted || errors.password) ? PASSWORD_HINT : null
+  const passwordInvalid = Boolean(passwordMessage) && !isValidPassword(values.password)
 
   return (
     <section className="mx-auto w-full max-w-md">
@@ -98,14 +104,17 @@ function LoginPage() {
             autoComplete="current-password"
             required
             value={values.password}
-            onChange={(event) => updateField('password', event.target.value)}
-            aria-invalid={Boolean(errors.password)}
-            aria-describedby={errors.password ? 'password-error' : undefined}
-            className={`${inputClasses} ${errors.password ? 'border-[var(--shop-primary)]' : 'border-[var(--shop-accent)]'}`}
+            onChange={(event) => {
+              setPasswordInteracted(true)
+              updateField('password', event.target.value)
+            }}
+            aria-invalid={passwordInvalid}
+            aria-describedby={passwordMessage ? 'password-feedback' : undefined}
+            className={`${inputClasses} ${passwordInvalid ? 'border-red-700' : 'border-[var(--shop-accent)]'}`}
           />
-          {errors.password && (
-            <p id="password-error" role="alert" className="mt-2 break-words text-sm text-[var(--shop-accent)]">
-              {errors.password}
+          {passwordMessage && (
+            <p id="password-feedback" className={`mt-2 break-words text-sm ${passwordInvalid ? 'text-red-700' : 'text-[var(--shop-text)]/70'}`}>
+              {passwordMessage}
             </p>
           )}
         </div>

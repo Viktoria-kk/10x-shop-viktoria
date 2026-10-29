@@ -76,7 +76,7 @@ Open the local URL printed by Vite. Product data needs an internet connection to
 
 ## Local Login
 
-The Login form accepts any non-empty username and a password of at least six characters; it does not check credentials against a server. Direct Login or Sign up opens Profile; an attempted Checkout still takes priority. The username, any Sign up email and later Profile edits stay in React memory only. Refreshing or logging out clears the session; the saved cart can still remain in `localStorage`.
+The Login and Sign up forms require a password of at least eight characters with a letter and a number; neither checks credentials against a server. Direct Login or Sign up opens Profile; an attempted Checkout still takes priority. The Profile change-password form checks the new password and confirmation, but it does not save a credential. The username, any Sign up email and later Profile edits stay in React memory only. Refreshing or logging out clears the session; the saved cart can still remain in `localStorage`.
 
 ## Live Demo
 

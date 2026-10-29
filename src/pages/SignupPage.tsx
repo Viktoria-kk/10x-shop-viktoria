@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import type { SignupFormValues } from '../types/user'
+import { isValidPassword, PASSWORD_HINT } from '../utils/password'
 
 type SignupErrors = Partial<Record<keyof SignupFormValues, string>>
 
@@ -25,6 +26,7 @@ function SignupPage() {
     confirmPassword: '',
   })
   const [errors, setErrors] = useState<SignupErrors>({})
+  const [passwordInteracted, setPasswordInteracted] = useState(false)
   const { isLoggedIn, login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
@@ -68,8 +70,8 @@ function SignupPage() {
 
     if (!values.password) {
       nextErrors.password = 'Password is required'
-    } else if (values.password.length < 6) {
-      nextErrors.password = 'Password must be at least 6 characters'
+    } else if (!isValidPassword(values.password)) {
+      nextErrors.password = PASSWORD_HINT
     }
 
     if (!values.confirmPassword) {
@@ -88,6 +90,11 @@ function SignupPage() {
 
   const inputClasses =
     'mt-2 block min-h-12 w-full rounded-xl border bg-white px-4 text-[var(--shop-text)] outline-none transition-colors focus-visible:border-[var(--shop-accent)] focus-visible:ring-2 focus-visible:ring-[var(--shop-accent)]'
+  const passwordMessage = errors.password === 'Password is required'
+    ? errors.password
+    : (passwordInteracted || errors.password) ? PASSWORD_HINT : null
+  const passwordInvalid = Boolean(passwordMessage) && !isValidPassword(values.password)
+  const confirmationMismatch = values.confirmPassword.length > 0 && values.confirmPassword !== values.password
 
   if (isLoggedIn) return <Navigate to={destination} replace />
 
@@ -107,8 +114,16 @@ function SignupPage() {
 
       <form className="mt-8 space-y-6 sm:mt-10" onSubmit={handleSubmit} noValidate>
         {signupFields.map((field) => {
-          const error = errors[field.name]
+          const error = field.name === 'password'
+            ? (passwordInvalid ? passwordMessage : undefined)
+            : field.name === 'confirmPassword' && confirmationMismatch
+              ? 'Passwords do not match'
+              : errors[field.name]
           const errorId = `${field.name}-error`
+          const describedBy = field.name === 'password' ? Boolean(passwordMessage) : Boolean(error)
+          const borderClass = error
+            ? field.name === 'password' ? 'border-red-700' : 'border-[var(--shop-primary)]'
+            : 'border-[var(--shop-accent)]'
 
           return (
             <div key={field.name}>
@@ -122,16 +137,17 @@ function SignupPage() {
                 autoComplete={field.autoComplete}
                 required
                 value={values[field.name]}
-                onChange={(event) => updateField(field.name, event.target.value)}
+                onChange={(event) => {
+                  if (field.name === 'password') setPasswordInteracted(true)
+                  updateField(field.name, event.target.value)
+                }}
                 aria-invalid={Boolean(error)}
-                aria-describedby={error ? errorId : undefined}
-                className={`${inputClasses} ${error ? 'border-[var(--shop-primary)]' : 'border-[var(--shop-accent)]'}`}
+                aria-describedby={describedBy ? errorId : undefined}
+                className={`${inputClasses} ${borderClass}`}
               />
-              {error && (
-                <p id={errorId} role="alert" className="mt-2 break-words text-sm text-[var(--shop-accent)]">
-                  {error}
-                </p>
-              )}
+              {field.name === 'password' ? (
+                passwordMessage && <p id={errorId} className={`mt-2 break-words text-sm ${passwordInvalid ? 'text-red-700' : 'text-[var(--shop-text)]/70'}`}>{passwordMessage}</p>
+              ) : error && <p id={errorId} role="alert" className="mt-2 break-words text-sm text-[var(--shop-accent)]">{error}</p>}
             </div>
           )
         })}
