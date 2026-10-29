@@ -110,8 +110,13 @@ function ProfilePage() {
 
   return (
     <section className="mx-auto w-full max-w-3xl">
-      <h1 className="text-4xl font-semibold tracking-tight text-[var(--shop-text)] sm:text-5xl">My account</h1>
-      <p className="mt-4 max-w-prose leading-7 text-[var(--shop-text)]">Manage your account details.</p>
+      <div className="flex flex-wrap items-start justify-between gap-x-8 gap-y-4">
+        <div className="min-w-0">
+          <h1 className="text-4xl font-semibold tracking-tight text-[var(--shop-text)] sm:text-5xl">My account</h1>
+          <p className="mt-4 max-w-prose leading-7 text-[var(--shop-text)]">Manage your account details.</p>
+        </div>
+        <Link to="/orders" className="inline-flex min-h-11 items-center rounded-lg font-semibold text-[var(--shop-primary)] underline underline-offset-4 hover:text-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]">My orders</Link>
+      </div>
 
       <div className="mt-12 flex min-w-0 items-center gap-5 sm:gap-7">
         <div aria-hidden="true" className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-[var(--shop-primary)] text-3xl font-semibold text-white sm:h-24 sm:w-24">
@@ -229,7 +234,6 @@ function ProfilePage() {
       <div className="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
         <Link to="/#catalogue" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--shop-primary)] px-6 font-medium text-white hover:bg-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]">Continue shopping</Link>
         <Link to="/cart" className="inline-flex min-h-11 items-center rounded-lg font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]">View cart</Link>
-        <Link to="/orders" className="inline-flex min-h-11 items-center rounded-lg font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]">My orders</Link>
         <button type="button" onClick={handleLogout} className="min-h-11 cursor-pointer rounded-lg font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]">Log out</button>
       </div>
     </section>

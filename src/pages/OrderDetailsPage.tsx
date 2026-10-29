@@ -100,9 +100,9 @@ function OrderDetailsPage() {
         <p className="mt-2 max-w-prose text-sm leading-6 text-[var(--shop-text)]">These stages are simulated for this project. They do not represent a real shipment.</p>
         <ol aria-label="Simulated order progress" className="mt-6 grid grid-cols-3 gap-3 sm:gap-6">
           {stages.map((stage, index) => (
-            <li key={stage} aria-current={index === currentStage ? 'step' : undefined} className={`min-w-0 border-t-2 pt-3 ${index <= currentStage ? 'border-[var(--shop-accent)]' : 'border-[var(--shop-primary)]/20'}`}>
+            <li key={stage} aria-current={index === currentStage ? 'step' : undefined} className={`min-w-0 border-t-2 pt-3 ${index === currentStage ? 'border-[var(--shop-primary)]' : index < currentStage ? 'border-[var(--shop-accent)]' : 'border-[var(--shop-primary)]/20'}`}>
               <span className="block break-words text-sm font-medium text-[var(--shop-text)] sm:text-base">{stage}</span>
-              <span className="mt-1 block text-xs text-[var(--shop-text)]">{index < currentStage ? 'Completed' : index === currentStage ? 'Current' : 'Upcoming'}</span>
+              <span className={`mt-1 block text-xs ${index === currentStage ? 'font-semibold text-[var(--shop-primary)]' : 'text-[var(--shop-text)]'}`}>{index < currentStage ? 'Completed' : index === currentStage ? 'Current' : 'Upcoming'}</span>
             </li>
           ))}
         </ol>

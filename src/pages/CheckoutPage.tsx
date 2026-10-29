@@ -1,11 +1,12 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { flushSync } from 'react-dom'
 import { Link, Navigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/cart-context'
 import type { CheckoutFormValues } from '../types/checkout'
 import type { Order } from '../types/order'
 import { discountedPrice, formatPrice } from '../utils/format'
-import { saveOrder } from '../utils/order-storage'
+import { readOrders, saveOrder } from '../utils/order-storage'
 
 type CheckoutErrors = Partial<Record<keyof CheckoutFormValues, string>>
 
@@ -39,14 +40,28 @@ function validateCheckout(values: CheckoutFormValues): CheckoutErrors {
 }
 
 function CheckoutPage() {
+  const { user } = useAuth()
   const { items, itemCount, subtotal, total, clearCart } = useCart()
-  const [values, setValues] = useState<CheckoutFormValues>({
-    fullName: '',
-    email: '',
+  const [values, setValues] = useState<CheckoutFormValues>(() => ({
+    fullName: [user?.firstName?.trim(), user?.lastName?.trim()].filter(Boolean).join(' '),
+    email: user?.email ?? '',
     address: '',
     city: '',
+  }))
+  const [previousShipping] = useState(() => {
+    const latestOrder = readOrders().reduce<Order | null>(
+      (latest, order) => !latest || order.placedAt >= latest.placedAt ? order : latest,
+      null,
+    )
+    if (!latestOrder) return null
+
+    return {
+      address: latestOrder.shipping.address.trim().length >= 5 ? latestOrder.shipping.address : '',
+      city: latestOrder.shipping.city.trim() ? latestOrder.shipping.city : '',
+    }
   })
   const [errors, setErrors] = useState<CheckoutErrors>({})
+  const [shippingFeedback, setShippingFeedback] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null)
   const [submissionError, setSubmissionError] = useState('')
@@ -58,6 +73,27 @@ function CheckoutPage() {
     setErrors((current) =>
       current[field] ? { ...current, [field]: validateCheckout(nextValues)[field] } : current,
     )
+    if (field === 'address' || field === 'city') setShippingFeedback(false)
+  }
+
+  function applyPreviousShipping() {
+    if (!previousShipping) return
+
+    const nextValues = {
+      ...values,
+      address: previousShipping.address || values.address,
+      city: previousShipping.city || values.city,
+    }
+    setValues(nextValues)
+    setErrors((current) => {
+      const nextErrors = validateCheckout(nextValues)
+      return {
+        ...current,
+        address: current.address ? nextErrors.address : undefined,
+        city: current.city ? nextErrors.city : undefined,
+      }
+    })
+    setShippingFeedback(true)
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -125,7 +161,22 @@ function CheckoutPage() {
         Checkout
       </h1>
       <div className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-3 lg:gap-12">
-        <form className="min-w-0 space-y-6 lg:col-span-2" onSubmit={handleSubmit} noValidate>
+        <form aria-labelledby="shipping-information-heading" className="min-w-0 space-y-6 lg:col-span-2" onSubmit={handleSubmit} noValidate>
+          <div>
+            <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1">
+              <h2 id="shipping-information-heading" className="text-xl font-semibold text-[var(--shop-text)]">Shipping information</h2>
+              {previousShipping && (previousShipping.address || previousShipping.city) && (
+                <button
+                  type="button"
+                  onClick={applyPreviousShipping}
+                  className="inline-flex min-h-11 max-w-full cursor-pointer items-center rounded-lg text-left text-sm font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
+                >
+                  Use shipping details from last order
+                </button>
+              )}
+            </div>
+            {shippingFeedback && <p role="status" className="mt-2 break-words text-sm text-[var(--shop-text)]">Shipping details added. You can still edit them.</p>}
+          </div>
           {checkoutFields.map((field) => {
             const error = errors[field.name]
             const errorId = `${field.name}-error`

@@ -1,7 +1,7 @@
 import type { OrderStatus } from '../../utils/order-status'
 
 const statusClasses: Record<OrderStatus, string> = {
-  Processing: 'bg-slate-100 text-slate-700',
+  Processing: 'bg-[var(--shop-primary)] text-white',
   Shipped: 'bg-blue-50 text-blue-800',
   Delivered: 'bg-green-50 text-green-800',
 }

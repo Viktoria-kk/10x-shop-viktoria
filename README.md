@@ -30,6 +30,7 @@ I use this project to demonstrate routing, reusable components, shared state, co
 | React Router | Page routes, product URLs and protected Checkout, Profile and Orders routes. |
 | DummyJSON REST API and native `fetch` | Catalogue and Product Details data. |
 | Browser `localStorage` | Separate `shop_cart` and `shop_orders` data across refreshes in the same browser and origin. |
+| Browser `sessionStorage` | Signed-in profile details across refreshes in the current tab session. |
 | ESLint | Static checks for code quality and React hooks. |
 
 ## Project Structure
@@ -76,7 +77,11 @@ Open the local URL printed by Vite. Product data needs an internet connection to
 
 ## Local Login
 
-The Login and Sign up forms require a password of at least eight characters with a letter and a number; neither checks credentials against a server. Direct Login or Sign up opens Profile; an attempted Checkout still takes priority. The Profile change-password form checks the new password and confirmation, but it does not save a credential. The username, any Sign up email and later Profile edits stay in React memory only. Refreshing or logging out clears the session; the saved cart can still remain in `localStorage`.
+The Login and Sign up forms require a password of at least eight characters with a letter and a number; neither checks credentials against a server. Direct Login or Sign up opens Profile; an attempted Checkout still takes priority. The Profile change-password form checks the new password and confirmation, but it does not save a credential. The username, any Sign up email and later Profile edits are saved in this tab's `sessionStorage` so a refresh keeps you signed in. Logging out or ending the tab session clears that local sign-in; the cart can still remain in `localStorage`.
+
+## Checkout Prefill
+
+I prefill Checkout's Full name and Email from the current Profile when those details are available. A separate button can copy Address and City from the most recent valid order saved in this browser; it never replaces the current contact details. Every field remains editable and goes through the usual Checkout validation. Profile details come from the current local session, and no shipping details are fetched from a backend.
 
 ## Live Demo
 
@@ -94,7 +99,7 @@ I wanted the interface to feel restrained and spacious, with clear typography an
 
 ## Current Limitations
 
-- Login and Sign up are simulated locally; Sign up creates no permanent account or user database. Refreshing resets login state.
+- Login and Sign up are simulated locally; Sign up creates no permanent account or user database. A refresh restores the current tab's session, while logging out clears it.
 - Cart and order records are stored separately in the current browser and origin. Orders are not linked to a verified customer account or backend, and no payment is processed.
 - Product loading depends on DummyJSON being available.
 - Homepage search, pagination, local Profile editing and Order History are optional enhancements. Category and price filtering and sorting remain outside the current implementation.
