@@ -82,7 +82,7 @@ function HeaderSearch() {
 
   return (
     <div
-      className={`flex h-11 max-w-full shrink-0 items-center overflow-hidden rounded-xl transition-[width,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${isOpen ? 'w-64 bg-[var(--shop-background)] focus-within:ring-2 focus-within:ring-[var(--shop-accent)] lg:w-72' : 'w-[6.5rem]'}`}
+      className={`flex h-11 max-w-full shrink-0 items-center overflow-hidden rounded-2xl transition-[width,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none ${isOpen ? 'w-64 bg-[var(--shop-background)] focus-within:ring-2 focus-within:ring-[var(--shop-accent)] lg:w-72' : 'w-[6.5rem]'}`}
     >
       <button
         ref={toggleRef}
