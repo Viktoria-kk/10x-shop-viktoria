@@ -8,7 +8,7 @@ The project gave me a way to connect components and props with state, effects, C
 
 ## 2. Goals and Initial Plan
 
-In [PLAN.md](PLAN.md), I set out to complete the CORE storefront before considering optional features. The planned work covered project setup, routing and shared layout, local authentication, a catalogue and product details, cart state, checkout, styling, quality checks, documentation and deployment. Search, sorting, Orders and Profile were deferred because they were not needed for the main journey. I later chose to add homepage product search, pagination and a locally editable Profile as optional enhancements.
+In [PLAN.md](PLAN.md), I set out to complete the CORE storefront before considering optional features. The planned work covered project setup, routing and shared layout, local authentication, a catalogue and product details, cart state, checkout, styling, quality checks, documentation and deployment. Search, sorting, Orders and Profile were deferred because they were not needed for the main journey. I later chose to add homepage product search, pagination, a locally editable Profile and browser-saved Order History as optional enhancements.
 
 The plan divided the work into small, reviewable stages. That order mattered: product types and request functions had to exist before the catalogue could display live data, and the cart had to be shared before Checkout could use its totals. The plan's hours were estimates, not a record of time actually spent. I have kept the historical plan as written rather than presenting its proposed schedule as completed dates.
 
@@ -44,7 +44,8 @@ The statuses below describe what the source and project records support. **Imple
 | Production build, README, PLAN and report | CORE | Implemented | Build passes; this report completes the documentation set. |
 | Vercel deployment | CORE | Partially implemented | Public site works according to my confirmation; detailed hosted checks remain open. |
 | Chrome, Firefox, keyboard and screen-reader checks | CORE quality | Not verified | No completed browser or assistive-technology results are recorded. |
-| Sorting and Orders | Optional FULL | Not implemented | Deferred outside CORE scope. |
+| Order History and Reorder | Optional FULL | Implemented | Browser-saved snapshots, protected list and details routes, simulated statuses and stock-checked Reorder; browser behaviour remains unverified. |
+| Sorting | Optional FULL | Not implemented | Deferred outside CORE scope. |
 
 ## 4. Technologies and Architecture
 
@@ -53,6 +54,8 @@ React components divide the interface into pages and smaller pieces, with typed 
 TypeScript describes product responses, cart items, user state and checkout forms. Strict checking catches incompatible data use before a build. Small functions under `src/api/` use native `fetch` for the DummyJSON catalogue and product details; they check HTTP success and let pages show an error instead of crashing. The catalogue requests 12 products, while `/products/:id` loads a selected product.
 
 React Router handles Home at `/`, the separate Catalogue at `/catalogue`, `/login`, optional `/signup`, protected `/profile`, `/products/:id`, `/cart`, protected `/checkout` and unknown paths. Home fetches 12 products for Featured and reuses that response for the homepage Catalogue's first page; later pages have their own requests. The separate `/catalogue` route keeps its existing grid. The expandable Header Search and homepage Catalogue keep immediate input state locally and share the committed, trimmed `?q=` value. On Home, typing waits 275ms before updating that URL; from another page, the Header waits for submission and then opens the homepage Catalogue. The homepage Catalogue reads `?page=` and requests 12 products using `skip = (page - 1) * 12`; search uses the same calculation and the API's matching total. Numbered controls preserve the query, and changing the query removes the page parameter. An `AbortController` cancels superseded requests, and the existing `ProductGrid` and `ProductCard` display results. Search handles loading, errors and no matches; clearing it returns to the usual grid. `AuthContext` holds a temporary user in memory for both Login and Sign up, including an email only when entered during Sign up. Profile editing validates and saves name, email and optional phone into that same session state while retaining the username. The Header says Log in for guests and Account for signed-in visitors. The protected-route check sends guests to Login and carries either Checkout or Profile as the return destination. Log out clears the user without touching the cart. `CartContext` owns item changes and calculates the badge count, subtotal and total from current items. It also reads and writes `shop_cart` in `localStorage`, checking saved values before using them. This keeps related shopping state in one place without a separate state library. Tailwind's responsive grid and flex utilities work alongside CSS variables for the shared colours.
+
+The protected `/orders` and `/orders/:id` routes read validated records from `shop_orders` in browser `localStorage`. Checkout saves a snapshot of item names, quantities and unit prices, shipping fields and totals before clearing the cart; a storage failure keeps the cart and form available. Order numbers increase from saved records. The list shows newest orders first, and a pure function calculates Processing, Shipped or Delivered from the saved time. A 30-second interval refreshes the displayed stage and is cleaned up when the page unmounts. Order Details shows the saved snapshot and a simulated timeline. Reorder fetches the current products, checks stock against the existing cart, then calls `CartContext.addItem` and opens the cart. Failed availability checks leave the cart unchanged. These records belong to this browser, not a verified account.
 
 ## 5. Visual Design Decisions
 
@@ -74,7 +77,7 @@ Second, Product Details had an `<h1>` in its success view but not in its early l
 
 ## 8. Testing and Quality
 
-`npm run typecheck`, `npm run lint` and `npm run build` pass after Profile editing, pagination and expandable Header Search. The [CORE test checklist](docs/CORE_TEST_CHECKLIST.md) records focused mocked harness passes for API responses, remaining-stock controls, cart operations and saved-data handling, local login and route protection, and Checkout validation and confirmation. Those checks are useful evidence for particular behaviours, but they are not a browser test of the full journey, the new Home route, pagination or search, the Sign up and Profile flows, or the submission guard. The source also includes loading and error messages, guarded storage access and an Error Boundary.
+`npm run typecheck`, `npm run lint` and `npm run build` pass after Order History was added. The [CORE test checklist](docs/CORE_TEST_CHECKLIST.md) records focused mocked harness passes for API responses, remaining-stock controls, cart operations and saved-data handling, local login and route protection, and Checkout validation and confirmation. Those checks predate Order History and are not browser tests of the full journey, the new Home route, pagination or search, Sign up, Profile, Orders or Reorder. The source also includes loading and error messages, guarded storage access and an Error Boundary.
 
 I found three avoidable sources of search delay in the code: the deliberate 400ms pause, a `limit=0` request that could return every match, and Catalogue typing state in `HomePage`, which made the landing sections render again on each keystroke. I reduced the pause to 275ms, request 12 matches per page with numbered pagination, and moved the Catalogue input state into its own component. The Header does not fetch results. Product cards already used thumbnails, fixed image dimensions and lazy loading; the requests had no artificial delay parameter. These changes reduce waiting and initial work by design, but I have not measured network timings or browser rendering before and after.
 
@@ -95,20 +98,20 @@ These values come from the current checks and Git history. Bundle sizes are Vite
 | TypeScript check | Pass | `npm run typecheck` after these changes. |
 | ESLint | Pass | `npm run lint` after these changes. |
 | Production build | Pass | `npm run build` after these changes. |
-| Main JavaScript bundle | 318.23 kB; 94.45 kB gzip | Current Vite build output. |
-| Main CSS bundle | 26.07 kB; 5.35 kB gzip | Current Vite build output. |
+| Main JavaScript bundle | 331.02 kB; 97.06 kB gzip | Current Vite build output. |
+| Main CSS bundle | 27.99 kB; 5.69 kB gzip | Current Vite build output. |
 | Lighthouse Performance | Not measured | No saved audit. |
 | Lighthouse Accessibility | Not measured | No saved audit. |
 | Lighthouse Best Practices | Not measured | No saved audit. |
 | Lighthouse CLS | Not measured | No saved audit. |
-| Total Git commits | 42 | `main`, including the inline Header Search refinement. |
+| Total Git commits | 44 | `main`, including Order History. |
 | Pull requests | Not verified | No repository count established. |
 | Closed issues | Not verified | No repository count established. |
 | Time per workstream | Not tracked | PLAN estimates are not actual time records. |
 
 ## 11. Limitations
 
-Authentication is simulated in React state and resets after refresh. Profile edits also live only in that session; a Login username does not supply an invented email. The optional Sign up form does not create a permanent registration or user database. Cart contents persist only in the current browser and origin through `localStorage`; a local order confirmation does not create a server order or charge a payment. Catalogue, search and details pages depend on DummyJSON and network access. Homepage search, pagination and local Profile editing are optional enhancements; filtering, sorting and Orders remain outside the implemented CORE scope.
+Authentication is simulated in React state and resets after refresh. Profile edits also live only in that session; a Login username does not supply an invented email. The optional Sign up form does not create a permanent registration or user database. Cart and order records persist in separate `localStorage` keys for the current browser and origin. Orders are not securely linked to a verified customer or saved on a server, and a local order confirmation does not charge a payment or start shipping. The order status timeline advances on a timer solely for demonstration. Catalogue, search, details and Reorder availability checks depend on DummyJSON and network access. Homepage search, pagination, local Profile editing and Order History are optional enhancements; filtering and sorting remain outside the implemented CORE scope.
 
 The application has responsive rules and accessible markup choices, but recorded manual browser, assistive-technology and Lighthouse results are still missing. These are limits on what I can claim about verification, not evidence that those scenarios fail.
 

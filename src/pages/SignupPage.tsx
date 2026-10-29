@@ -33,7 +33,8 @@ function SignupPage() {
     navigationState !== null &&
     typeof navigationState === 'object' &&
     'from' in navigationState &&
-    (navigationState.from === '/checkout' || navigationState.from === '/profile')
+    typeof navigationState.from === 'string' &&
+    (navigationState.from === '/checkout' || navigationState.from === '/profile' || navigationState.from === '/orders' || /^\/orders\/[^/]+$/.test(navigationState.from))
       ? navigationState.from
       : '/profile'
 

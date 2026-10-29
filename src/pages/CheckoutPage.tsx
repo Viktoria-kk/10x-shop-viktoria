@@ -3,15 +3,11 @@ import { flushSync } from 'react-dom'
 import { Link, Navigate } from 'react-router-dom'
 import { useCart } from '../context/cart-context'
 import type { CheckoutFormValues } from '../types/checkout'
+import type { Order } from '../types/order'
 import { discountedPrice, formatPrice } from '../utils/format'
+import { saveOrder } from '../utils/order-storage'
 
 type CheckoutErrors = Partial<Record<keyof CheckoutFormValues, string>>
-
-interface CompletedOrder {
-  customerName: string
-  itemCount: number
-  total: number
-}
 
 const checkoutFields = [
   { name: 'fullName', label: 'Full name', type: 'text', autoComplete: 'name' },
@@ -52,7 +48,7 @@ function CheckoutPage() {
   })
   const [errors, setErrors] = useState<CheckoutErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [completedOrder, setCompletedOrder] = useState<CompletedOrder | null>(null)
+  const [completedOrder, setCompletedOrder] = useState<Order | null>(null)
   const [submissionError, setSubmissionError] = useState('')
   const orderPlaced = useRef(false)
 
@@ -74,34 +70,43 @@ function CheckoutPage() {
 
     setSubmissionError('')
     orderPlaced.current = true
-    const order: CompletedOrder = { customerName: values.fullName.trim(), itemCount, total }
-
+    flushSync(() => setIsSubmitting(true))
+    let order: Order
     try {
-      flushSync(() => setIsSubmitting(true))
-      clearCart()
-      setCompletedOrder(order)
+      order = saveOrder(items, values, subtotal, total)
     } catch {
       orderPlaced.current = false
-      setSubmissionError('Unable to place your order. Please try again.')
-    } finally {
+      setSubmissionError('Unable to save your order. Your cart is unchanged. Please try again.')
       setIsSubmitting(false)
+      return
     }
+
+    clearCart()
+    setCompletedOrder(order)
+    setIsSubmitting(false)
   }
 
   if (completedOrder !== null) {
+    const completedCount = completedOrder.items.reduce((count, item) => count + item.quantity, 0)
     return (
       <section role="status" className="mx-auto max-w-2xl break-words text-center">
         <h1 className="text-3xl font-semibold tracking-tight text-[var(--shop-text)] md:text-4xl">
           Thank you! Your order has been placed.
         </h1>
-        <p className="mt-5 text-[var(--shop-text)]">Order for {completedOrder.customerName}</p>
+        <p className="mt-5 text-[var(--shop-text)]">Order {completedOrder.number} for {completedOrder.shipping.fullName}</p>
         <p className="mt-2 text-[var(--shop-text)]">
-          {completedOrder.itemCount} {completedOrder.itemCount === 1 ? 'item' : 'items'} · Total{' '}
+          {completedCount} {completedCount === 1 ? 'item' : 'items'} · Total{' '}
           <span className="font-semibold">{formatPrice(completedOrder.total)}</span>
         </p>
         <Link
-          to="/catalogue"
-          className="mt-8 inline-flex min-h-11 items-center rounded-lg font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
+          to={`/orders/${completedOrder.id}`}
+          className="mt-8 inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--shop-primary)] px-6 font-medium text-white hover:bg-[var(--shop-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
+        >
+          View order
+        </Link>
+        <Link
+          to="/#catalogue"
+          className="ml-4 mt-8 inline-flex min-h-11 items-center rounded-lg font-medium text-[var(--shop-accent)] underline underline-offset-4 hover:text-[var(--shop-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--shop-accent)]"
         >
           Continue shopping
         </Link>

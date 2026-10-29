@@ -1,10 +1,16 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import CartItemRow from '../components/cart/CartItemRow'
 import { useCart } from '../context/cart-context'
 import { formatPrice } from '../utils/format'
 
 function CartPage() {
   const { items, setQuantity, removeItem, clearCart, itemCount, subtotal, total } = useCart()
+  const location = useLocation()
+  const navigationState: unknown = location.state
+  const reorderMessage = navigationState !== null && typeof navigationState === 'object'
+    && 'reorderMessage' in navigationState && typeof navigationState.reorderMessage === 'string'
+    ? navigationState.reorderMessage
+    : null
 
   function handleClearCart() {
     if (window.confirm('Clear the cart? This cannot be undone.')) clearCart()
@@ -13,6 +19,7 @@ function CartPage() {
   return (
     <section>
       <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">Your cart</h1>
+      {reorderMessage && <p role="status" className="mt-4 max-w-prose text-sm font-medium text-[var(--shop-accent)]">{reorderMessage}</p>}
       {items.length === 0 ? (
         <div className="mt-8 max-w-prose sm:mt-10">
           <p role="status" className="text-lg text-[var(--shop-text)]">Your cart is empty.</p>
