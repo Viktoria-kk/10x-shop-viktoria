@@ -2,7 +2,7 @@
 
 ## Overview
 
-10X Shop is a React single-page application. Vite builds its HTML, CSS and JavaScript into static files, so it can be hosted without an application server. The project records identify [10x-shop-viktoria.vercel.app](https://10x-shop-viktoria.vercel.app/) as the Vercel URL. A previous general site confirmation is recorded, but the detailed hosted checks below have not been completed. On 10 November 2026, this workspace could not resolve the host, so current availability was not independently verified.
+10X Shop is a React single-page application. Vite builds its HTML, CSS and JavaScript into static files, so it can be hosted without an application server. On 10 November 2026, [10x-shop-viktoria.vercel.app](https://10x-shop-viktoria.vercel.app/) responded to direct HTTP requests and served the current build assets. The detailed browser checks below remain open.
 
 ## Hosting Platform
 
@@ -45,7 +45,9 @@ The current source does not require environment variables. If Vercel's build fai
 
 ## Verification Checklist
 
-**Detailed hosted checks are PENDING.** A previous general website confirmation does not establish the individual scenarios below. On 10 November 2026, requests for `/` and `/products/5` from this workspace failed at DNS resolution; this is an access limit, not evidence that the site itself is down. Tick an item only after observing it on the deployed URL.
+**HTTP checks passed on 10 November 2026.** A sandboxed request initially failed at DNS resolution; a subsequent read-only request outside that sandbox reached the site. Direct GET requests for `/`, `/products/5`, `/login`, `/cart`, `/checkout`, `/profile`, `/orders` and an unknown route returned HTTP 200 and SPA HTML. The root and `/products/5` returned identical HTML. The referenced JavaScript and CSS assets both returned HTTP 200 and matched the filenames from the current local build. DummyJSON returned 12 products from `products?limit=12&skip=0`; `/products/5` returned product ID 5, and an invalid product ID returned HTTP 404. The GitHub repository page returned HTTP 200 without a Git login.
+
+**Detailed browser checks remain PENDING.** HTTP responses do not prove that React rendered the correct route, products or errors, that a browser refresh preserves behaviour, or that interactions work. Tick an item below only after observing it in the deployed browser page.
 
 - [ ] The root URL loads the application and Catalogue products appear.
 - [ ] Product images load without broken links.
@@ -74,4 +76,4 @@ Static hosting does not add a backend. Login is local state, cart data is browse
 
 ## Deployment Status
 
-**Recorded Vercel URL:** [https://10x-shop-viktoria.vercel.app/](https://10x-shop-viktoria.vercel.app/). The production build and root-level `vercel.json` were verified locally. Current live availability and the detailed hosted checklist remain unverified from this workspace.
+**HTTP-accessible Vercel URL:** [https://10x-shop-viktoria.vercel.app/](https://10x-shop-viktoria.vercel.app/). The production build and root-level `vercel.json` were verified locally; direct-route and asset HTTP checks passed. The detailed rendered and interactive checklist remains unverified.

@@ -85,7 +85,7 @@ I prefill Checkout's Full name and Email from the current Profile when those det
 
 ## Live Demo
 
-The project records list a [Vercel URL](https://10x-shop-viktoria.vercel.app/). Its current availability and direct-route refresh have not been independently verified in this audit. See the [deployment guide](docs/DEPLOYMENT.md) for build settings, SPA routing and outstanding hosted checks.
+The [Vercel site](https://10x-shop-viktoria.vercel.app/) and its current build assets responded to direct HTTP checks on 10 November 2026. Rendered routes, interactions and browser refresh still need observed browser checks. See the [deployment guide](docs/DEPLOYMENT.md) for build settings, SPA routing and the remaining checklist.
 
 ## Testing and Quality
 

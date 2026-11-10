@@ -42,7 +42,7 @@ The statuses below describe what the source and project records support. **Imple
 | Error Boundary | CORE | Implemented | Render-error fallback offers Reload. |
 | Debugging record | CORE | Partially implemented | Three documented cases have different evidence strengths; one failing draft is absent from Git. |
 | Production build, README, PLAN and report | CORE | Implemented | Build passes; this report completes the documentation set. |
-| Vercel deployment | CORE | Partially verified | A previous general site confirmation is recorded; current reachability and detailed hosted checks remain open. |
+| Vercel deployment | CORE | Partially verified | Current HTTP route and asset checks passed; rendered routes and interactions remain unverified. |
 | Chrome, Firefox, keyboard and screen-reader checks | CORE quality | Not verified | No completed browser or assistive-technology results are recorded. |
 | Order History and Reorder | Optional FULL | Implemented | Browser-saved snapshots, protected list and details routes, simulated statuses and stock-checked Reorder; browser behaviour remains unverified. |
 | Sorting | Optional FULL | Not implemented | Deferred outside CORE scope. |
@@ -83,11 +83,11 @@ Second, Product Details had an `<h1>` in its success view but not in its early l
 
 I found three avoidable sources of search delay in the code: the deliberate 400ms pause, a `limit=0` request that could return every match, and Catalogue typing state in `HomePage`, which made the landing sections render again on each keystroke. I reduced the pause to 275ms, request 12 matches per page with numbered pagination, and moved the Catalogue input state into its own component. The Header does not fetch results. Product cards already used thumbnails, fixed image dimensions and lazy loading; the requests had no artificial delay parameter. These changes reduce waiting and initial work by design, but I have not measured network timings or browser rendering before and after.
 
-The [compatibility review](COMPATIBILITY.md) leaves Chrome, Firefox and mobile-sized browser scenarios **NOT TESTED**. Keyboard and screen-reader use, a complete shopping journey, direct-route refreshes and 375px overflow are also unverified in the recorded checklist. The [performance notes](docs/PERFORMANCE_NOTES.md) contain build observations but no measured runtime improvement or Lighthouse audit. This distinction matters because a passing static check cannot prove that the interface behaves correctly in every browser.
+The [compatibility review](COMPATIBILITY.md) leaves Chrome, Firefox and mobile-sized browser scenarios **NOT TESTED**. Keyboard and screen-reader use, a complete shopping journey, rendered direct-route refreshes and 375px overflow are also unverified in the recorded checklist. The [performance notes](docs/PERFORMANCE_NOTES.md) contain build observations but no measured runtime improvement or Lighthouse audit; a remote PageSpeed Insights request on 10 November returned HTTP 429 without a score. This distinction matters because a passing static check or successful HTTP route response cannot prove that the interface behaves correctly in every browser.
 
 ## 9. Deployment
 
-I configured 10X Shop for Vercel, and the project records identify a [Vercel URL](https://10x-shop-viktoria.vercel.app/) and [GitHub repository](https://github.com/Viktoria-kk/10x-shop-viktoria). A previous general site confirmation is recorded, while the detailed hosted checklist in the [deployment guide](docs/DEPLOYMENT.md) remains unrecorded. On 10 November, this workspace could not resolve the Vercel host or DummyJSON, so current public availability was not independently established. I am not treating a local build or that earlier general confirmation as evidence of every route, viewport or browser.
+I configured 10X Shop for Vercel at the [site URL](https://10x-shop-viktoria.vercel.app/), with source in the [public GitHub repository](https://github.com/Viktoria-kk/10x-shop-viktoria). On 10 November 2026, direct HTTP requests reached the root and application routes, the current build assets returned HTTP 200, DummyJSON returned 12 products, and the GitHub page returned HTTP 200 without a Git login. These checks establish network reachability and the SPA response, not the rendered route, shopping journey, viewport layout or browser refresh behaviour. The detailed hosted checklist in the [deployment guide](docs/DEPLOYMENT.md) remains open.
 
 Vite produces static files in `dist/` with `npm run build`. The root `vercel.json` rewrites requests to `/index.html` so React Router can handle application URLs requested directly. The rewrite is configured; refreshing individual hosted routes still needs a documented live check. Hosting the frontend does not add a real account or order server.
 
@@ -106,7 +106,7 @@ These values come from the current checks and Git history. Bundle sizes are Vite
 | Lighthouse Accessibility | Not measured | No saved audit. |
 | Lighthouse Best Practices | Not measured | No saved audit. |
 | Lighthouse CLS | Not measured | No saved audit. |
-| Total Git commits | 46 | Audited `main` baseline `d5a116a` before this requirements update; use `git rev-list --count HEAD` for a later total. |
+| Total Git commits | 48 | `main` after the requirements and HTTP verification updates. |
 | Pull requests | Not verified | No repository count established. |
 | Closed issues | Not verified | No repository count established. |
 | Time per workstream | Not tracked | PLAN estimates are not actual time records. |

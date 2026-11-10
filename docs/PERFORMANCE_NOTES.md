@@ -1,5 +1,9 @@
 # CORE performance review
 
+## 10 November 2026 follow-up
+
+The current `npm run typecheck`, `npm run lint` and `npm run build` passed. Vite 8.3.5 transformed 56 modules and reported 336.58 kB JavaScript (98.14 kB gzip) and 28.11 kB CSS (5.69 kB gzip). These are build sizes, not page-speed scores or timings. A read-only request for a mobile PageSpeed Insights report returned HTTP 429 (Too Many Requests), so no Lighthouse score was obtained. Browser performance remains unmeasured; the older review below is retained as a dated source and build record.
+
 ## Purpose and scope
 
 Review the current storefront for avoidable work without changing CORE behaviour. On 25 October 2026, I inspected the Catalogue, product grid and cards, product details, cart and checkout, authentication, Header, API functions, pricing helpers, effects, routing, and Vite configuration. No standalone PRD or Appendix A was available in the repository; the current source and `PLAN.md` informed this review.
