@@ -42,7 +42,7 @@ The statuses below describe what the source and project records support. **Imple
 | Error Boundary | CORE | Implemented | Render-error fallback offers Reload. |
 | Debugging record | CORE | Partially implemented | Three documented cases have different evidence strengths; one failing draft is absent from Git. |
 | Production build, README, PLAN and report | CORE | Implemented | Build passes; this report completes the documentation set. |
-| Vercel deployment | CORE | Partially implemented | Public site works according to my confirmation; detailed hosted checks remain open. |
+| Vercel deployment | CORE | Partially verified | A previous general site confirmation is recorded; current reachability and detailed hosted checks remain open. |
 | Chrome, Firefox, keyboard and screen-reader checks | CORE quality | Not verified | No completed browser or assistive-technology results are recorded. |
 | Order History and Reorder | Optional FULL | Implemented | Browser-saved snapshots, protected list and details routes, simulated statuses and stock-checked Reorder; browser behaviour remains unverified. |
 | Sorting | Optional FULL | Not implemented | Deferred outside CORE scope. |
@@ -79,7 +79,7 @@ Second, Product Details had an `<h1>` in its success view but not in its early l
 
 ## 8. Testing and Quality
 
-`npm run typecheck`, `npm run lint` and `npm run build` pass after Order History was added. The [CORE test checklist](docs/CORE_TEST_CHECKLIST.md) records focused mocked harness passes for API responses, remaining-stock controls, cart operations and saved-data handling, local login and route protection, and Checkout validation and confirmation. Those checks predate Order History and are not browser tests of the full journey, the new Home route, pagination or search, Sign up, Profile, Orders or Reorder. The source also includes loading and error messages, guarded storage access and an Error Boundary.
+`npm run typecheck`, `npm run lint` and `npm run build` passed again on 10 November 2026. A current in-memory Node check passed for the catalogue URL and pagination skip, HTTP failure, product 404, password rules and order-status stages; it mocked `fetch` and was not a live API or browser test. The [CORE test checklist](docs/CORE_TEST_CHECKLIST.md) records older focused harness passes for remaining-stock controls, cart operations and saved-data handling, local login and route protection, and Checkout validation and confirmation. Those older checks predate Order History and later changes; they are not browser tests of the current full journey, Home route, pagination or search, Sign up, Profile, Orders or Reorder. The source also includes loading and error messages, guarded storage access and an Error Boundary. The [current requirements audit](docs/CORE_REQUIREMENTS_AUDIT.md) separates implemented code from observed behaviour.
 
 I found three avoidable sources of search delay in the code: the deliberate 400ms pause, a `limit=0` request that could return every match, and Catalogue typing state in `HomePage`, which made the landing sections render again on each keystroke. I reduced the pause to 275ms, request 12 matches per page with numbered pagination, and moved the Catalogue input state into its own component. The Header does not fetch results. Product cards already used thumbnails, fixed image dimensions and lazy loading; the requests had no artificial delay parameter. These changes reduce waiting and initial work by design, but I have not measured network timings or browser rendering before and after.
 
@@ -87,7 +87,7 @@ The [compatibility review](COMPATIBILITY.md) leaves Chrome, Firefox and mobile-s
 
 ## 9. Deployment
 
-I deployed 10X Shop on Vercel. The [live site](https://10x-shop-viktoria.vercel.app/) is public, and the [GitHub repository](https://github.com/Viktoria-kk/10x-shop-viktoria) contains the source. I have confirmed that the deployed website works, while the detailed hosted checklist in the [deployment guide](docs/DEPLOYMENT.md) remains unrecorded. I am not treating that general confirmation as evidence of every route, viewport or browser.
+I configured 10X Shop for Vercel, and the project records identify a [Vercel URL](https://10x-shop-viktoria.vercel.app/) and [GitHub repository](https://github.com/Viktoria-kk/10x-shop-viktoria). A previous general site confirmation is recorded, while the detailed hosted checklist in the [deployment guide](docs/DEPLOYMENT.md) remains unrecorded. On 10 November, this workspace could not resolve the Vercel host or DummyJSON, so current public availability was not independently established. I am not treating a local build or that earlier general confirmation as evidence of every route, viewport or browser.
 
 Vite produces static files in `dist/` with `npm run build`. The root `vercel.json` rewrites requests to `/index.html` so React Router can handle application URLs requested directly. The rewrite is configured; refreshing individual hosted routes still needs a documented live check. Hosting the frontend does not add a real account or order server.
 
@@ -100,13 +100,13 @@ These values come from the current checks and Git history. Bundle sizes are Vite
 | TypeScript check | Pass | `npm run typecheck` after these changes. |
 | ESLint | Pass | `npm run lint` after these changes. |
 | Production build | Pass | `npm run build` after these changes. |
-| Main JavaScript bundle | 331.02 kB; 97.06 kB gzip | Current Vite build output. |
-| Main CSS bundle | 27.99 kB; 5.69 kB gzip | Current Vite build output. |
+| Main JavaScript bundle | 336.58 kB; 98.14 kB gzip | Vite build output on 10 November 2026. |
+| Main CSS bundle | 28.11 kB; 5.69 kB gzip | Vite build output on 10 November 2026. |
 | Lighthouse Performance | Not measured | No saved audit. |
 | Lighthouse Accessibility | Not measured | No saved audit. |
 | Lighthouse Best Practices | Not measured | No saved audit. |
 | Lighthouse CLS | Not measured | No saved audit. |
-| Total Git commits | 44 | `main`, including Order History. |
+| Total Git commits | 46 | Audited `main` baseline `d5a116a` before this requirements update; use `git rev-list --count HEAD` for a later total. |
 | Pull requests | Not verified | No repository count established. |
 | Closed issues | Not verified | No repository count established. |
 | Time per workstream | Not tracked | PLAN estimates are not actual time records. |

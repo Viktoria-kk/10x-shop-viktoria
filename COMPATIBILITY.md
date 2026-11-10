@@ -1,5 +1,7 @@
 # 10X Shop CORE browser compatibility review
 
+> **Historical source review (25 October 2026).** The application has changed since this review. On 10 November 2026, the current source still had no recorded Chrome, Firefox or 375px browser result. The [current requirements audit](docs/CORE_REQUIREMENTS_AUDIT.md) uses the supplied PRD and Appendix A; the browser matrix below remains **NOT TESTED** until observed checks are added.
+
 ## Purpose and scope
 
 This report tracks the CORE storefront in Google Chrome and Mozilla Firefox at desktop and mobile-sized widths. It separates source and build review from browser results. Safari and Edge are outside this commit's CORE scope.

@@ -102,7 +102,7 @@ function HeaderSearch() {
           onKeyDown={(event) => { if (event.key === 'Escape') { event.preventDefault(); closeSearch() } }}
           className="flex h-full w-full min-w-0 items-center gap-1 px-1"
         >
-          <button type="submit" aria-label="Search products" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[var(--shop-accent)] hover:bg-[var(--shop-primary)]/10 focus-visible:outline-2 focus-visible:outline-[var(--shop-accent)]"><SearchIcon /></button>
+          <button type="submit" aria-label="Search products" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-[var(--shop-accent)] hover:bg-[var(--shop-primary)]/10 focus-visible:outline-2 focus-visible:outline-[var(--shop-accent)]"><SearchIcon /></button>
           <label htmlFor="header-search" className="sr-only">Search products</label>
           <input
             ref={inputRef}
@@ -113,8 +113,8 @@ function HeaderSearch() {
             placeholder="Search products..."
             className="min-w-0 flex-1 appearance-none bg-transparent px-1 py-2 text-sm text-[var(--shop-text)] outline-none placeholder:text-[var(--shop-text)]/60 [&::-webkit-search-cancel-button]:hidden"
           />
-          {input && <button type="button" onClick={clearSearch} aria-label="Clear search" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[var(--shop-accent)] hover:bg-[var(--shop-primary)]/10 focus-visible:outline-2 focus-visible:outline-[var(--shop-accent)]"><CloseIcon /></button>}
-          <button type="button" onClick={closeSearch} aria-label="Close search" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[var(--shop-text)] hover:bg-[var(--shop-primary)]/10 focus-visible:outline-2 focus-visible:outline-[var(--shop-accent)]"><CloseIcon /></button>
+          {input && <button type="button" onClick={clearSearch} aria-label="Clear search" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-[var(--shop-accent)] hover:bg-[var(--shop-primary)]/10 focus-visible:outline-2 focus-visible:outline-[var(--shop-accent)]"><CloseIcon /></button>}
+          <button type="button" onClick={closeSearch} aria-label="Close search" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-[var(--shop-text)] hover:bg-[var(--shop-primary)]/10 focus-visible:outline-2 focus-visible:outline-[var(--shop-accent)]"><CloseIcon /></button>
         </form>
       )}
     </div>

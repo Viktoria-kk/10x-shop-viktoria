@@ -1,5 +1,7 @@
 # CORE shopping flow test checklist
 
+> **Historical test record (25 October 2026).** The focused harness PASS results below apply to the revision tested then. Later commits changed Login defaults, the Header account entry, Sign up, Profile, Orders, Checkout prefill and password validation. On 10 November 2026, current `typecheck`, `lint` and `build` passed, but those interaction harnesses were not rerun and the browser rows remain **NOT TESTED**. See the [current requirements audit](CORE_REQUIREMENTS_AUDIT.md) before using these results as evidence for the present revision.
+
 ## Testing environment
 
 - Date: 25 October 2026 (Georgia time).
