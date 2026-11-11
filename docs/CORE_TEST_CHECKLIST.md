@@ -1,5 +1,18 @@
 # CORE shopping flow test checklist
 
+## 11 November 2026 logic verification
+
+`npm test` runs `tests/shopping-flow.test.mjs` using Node's built-in test runner, with no added dependencies or server. All four scenarios passed. They execute the current source through controlled React hooks, routing, fetch and storage; this is not a React DOM renderer or a browser test.
+
+| Scenario | Observed result |
+| --- | --- |
+| Catalogue → Product → Cart → guest Login → Checkout → confirmation → Header logout | PASS: products load; a gallery selection changes the image; adding and editing quantity updates the cart; guest guard carries the Checkout destination; invalid Login is blocked; valid Login returns to Checkout; all four Checkout errors appear; valid placement saves one order despite repeated submit, shows the expected total and clears cart storage. Header logout returns Home, clears session login and preserves cart items. |
+| Cart operations, persistence and prices | PASS: restored provider reads saved items; invalid and excess quantities are rejected; fresh product prices update an existing line; discounts below 1% show the discounted price; Clear cart cancellation preserves items, confirmation clears them; removal empties the cart. |
+| Checkout failure/retry and empty cart | PASS: empty Checkout redirects to Cart; failed order storage keeps the cart and displays an error; retry succeeds after storage becomes available. |
+| API and fallback states | PASS: failed requests throw and display the catalogue error; product HTTP 404 returns null; invalid ID selects Not Found; empty catalogue shows its empty state; Error Boundary error state renders its fallback and Reload action. |
+
+The two-unit pricing regression now expects $8.94 per unit and $17.88 total. Browser navigation, actual refresh, Chrome/Firefox, keyboard/focus, viewport layout, live request behaviour and Lighthouse remain unverified. The historical results below are retained with their original dates.
+
 > **Historical test record (25 October 2026).** The focused harness PASS results below apply to the revision tested then. Later commits changed Login defaults, the Header account entry, Sign up, Profile, Orders, Checkout prefill and password validation. On 10 November 2026, current `typecheck`, `lint` and `build` passed, but those interaction harnesses were not rerun and the browser rows remain **NOT TESTED**. See the [current requirements audit](CORE_REQUIREMENTS_AUDIT.md) before using these results as evidence for the present revision.
 
 ## Testing environment

@@ -143,9 +143,7 @@ function ProductDetails({ productId }: { productId: number }) {
           <div className="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-2">
             <span className="text-3xl font-semibold text-[var(--shop-text)]">
               {formatPrice(
-                hasDiscount
-                  ? discountedPrice(product.price, product.discountPercentage)
-                  : product.price,
+                discountedPrice(product.price, product.discountPercentage),
               )}
             </span>
             {hasDiscount && (

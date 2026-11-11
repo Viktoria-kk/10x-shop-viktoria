@@ -12,7 +12,7 @@ I use this project to demonstrate routing, reusable components, shared state, co
 - A homepage Catalogue with URL-based pagination: 12 products per page, using DummyJSON `limit`, `skip` and the returned total. Search from the Catalogue or expandable Header control uses the same `?q=` value and paginates matching results.
 - Product Details with images, thumbnail selection, stock-aware quantity controls and Add to cart.
 - A shared cart with quantity changes, Remove and Clear cart actions, discounted totals and a Header item count. Cart items are saved in browser `localStorage`.
-- One account link in the Header: it says **Log in** for guests and **Account** for signed-in visitors.
+- The Header shows **Log in** for guests and **Account** plus **Log out** for signed-in visitors. Log out returns Home and preserves the cart.
 - Local Login and Sign up forms link to each other. Direct sign-in opens Profile; guests who attempted Checkout return there after either form.
 - A protected Profile page lets me edit first name, last name, email and optional phone within the current React session. The username remains separate, and shopping, cart and Log out actions remain available.
 - My orders and individual Order Details show purchases saved in this browser, with a simulated status and a Reorder action that checks current product availability before adding items to the cart.
@@ -71,6 +71,7 @@ Open the local URL printed by Vite. Product data needs an internet connection to
 | --- | --- |
 | `npm run dev` | Start the Vite development server. |
 | `npm run typecheck` | Check TypeScript without emitting files. |
+| `npm test` | Run the shopping-flow logic checks with controlled hooks, routing, fetch and storage. |
 | `npm run lint` | Run ESLint. |
 | `npm run build` | Run TypeScript checks and build production files in `dist/`. |
 | `npm run preview` | Serve an existing production build locally for inspection. |
@@ -88,6 +89,8 @@ I prefill Checkout's Full name and Email from the current Profile when those det
 The [Vercel site](https://10x-shop-viktoria.vercel.app/) and its current build assets responded to direct HTTP checks on 10 November 2026. Rendered routes, interactions and browser refresh still need observed browser checks. See the [deployment guide](docs/DEPLOYMENT.md) for build settings, SPA routing and the remaining checklist.
 
 ## Testing and Quality
+
+On 11 November 2026, `npm test` passed four scenarios covering catalogue/product actions, cart operations and persistence, protected Login return, Checkout validation/confirmation, storage failure/retry, Header logout and API/error states. These execute actual modules with controlled dependencies; browser rendering, layout and real user interaction still need preview checks.
 
 The project has passing `typecheck`, `lint` and `build` checks. [CORE_TEST_CHECKLIST.md](docs/CORE_TEST_CHECKLIST.md) separates mocked harness checks from browser work that is still **NOT TESTED**. [COMPATIBILITY.md](COMPATIBILITY.md) records pending Chrome and Firefox checks. [PERFORMANCE_NOTES.md](docs/PERFORMANCE_NOTES.md) records actual build sizes and explains that runtime performance was not measured. [DEBUG-LOG.md](DEBUG-LOG.md) traces real debugging cases and their evidence limits.
 

@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { useCart } from '../../context/cart-context'
 import HeaderSearch from './HeaderSearch'
@@ -21,9 +21,15 @@ function navigationLinkClasses(isActive: boolean) {
 }
 
 function Header() {
-  const { isLoggedIn } = useAuth()
+  const { isLoggedIn, logout } = useAuth()
   const { itemCount } = useCart()
   const location = useLocation()
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    logout()
+    navigate('/', { replace: true })
+  }
 
   return (
     <header className="relative border-b border-[var(--shop-background)] bg-white">
@@ -67,6 +73,15 @@ function Header() {
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="mr-2 h-5 w-5 shrink-0"><circle cx="12" cy="8" r="3.5" /><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6" strokeLinecap="round" /></svg>
             {isLoggedIn ? 'Account' : 'Log in'}
           </NavLink>
+          {isLoggedIn && (
+            <button
+              type="button"
+              onClick={handleLogout}
+              className={`${navigationItemClasses} cursor-pointer text-[var(--shop-text)] hover:text-[var(--shop-primary)] hover:underline hover:underline-offset-4`}
+            >
+              Log out
+            </button>
+          )}
         </nav>
       </div>
     </header>

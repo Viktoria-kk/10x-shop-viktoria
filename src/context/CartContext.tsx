@@ -103,7 +103,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return {
           items: current.items.map((item) =>
             item.productId === product.id
-              ? { ...item, quantity: nextQuantity, stock: product.stock }
+              ? { ...item, quantity: nextQuantity, stock: product.stock, price: product.price, discountPercentage: product.discountPercentage }
               : item,
           ),
         }

@@ -61,9 +61,7 @@ function ProductCard({ product, headingLevel: Heading = 'h2' }: ProductCardProps
       <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <span className="text-lg font-semibold text-[var(--shop-text)]">
           {formatPrice(
-            hasDiscount
-              ? discountedPrice(product.price, product.discountPercentage)
-              : product.price,
+            discountedPrice(product.price, product.discountPercentage),
           )}
         </span>
         {hasDiscount && (
